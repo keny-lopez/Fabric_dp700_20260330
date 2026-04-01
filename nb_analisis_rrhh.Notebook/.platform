@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Notebook",
+    "displayName": "nb_analisis_rrhh"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "4744a8c0-c315-9de5-4187-0065bfb59dd9"
+  }
+}
