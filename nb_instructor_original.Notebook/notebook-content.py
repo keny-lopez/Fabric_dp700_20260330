@@ -29,6 +29,32 @@
 
 # CELL ********************
 
+# =============================================================
+# ⚠️  NOTEBOOK DE REFERENCIA — NO EJECUTAR
+#
+# Este notebook conserva el código original del instructor
+# tal como fue presentado en clase el 06/11/2025.
+#
+# Contiene problemas de compatibilidad con Fabric 2026:
+#   · Rutas relativas que fallan con lakehouse no predeterminado
+#   · Lectura de shift con PyArrow que rechaza TIME(NANOS,true)
+#   · Dependencia de /lakehouse/default apuntando a Bronze
+#
+# Para la versión corregida ver: nb_instructor_corregido
+# Para la versión de producción ver: nb_analisis_rrhh
+# =============================================================
+
+raise Exception("⛔ Notebook de referencia. Ejecución bloqueada intencionalmente.")
+
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# CELL ********************
+
 # leer los ficheros parquet que son el resultado de la importación anterior
 
 df_department = spark.read.parquet("Files/humanresources/department")
