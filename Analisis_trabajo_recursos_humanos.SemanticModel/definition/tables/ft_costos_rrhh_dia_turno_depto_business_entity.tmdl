@@ -1,0 +1,101 @@
+table ft_costos_rrhh_dia_turno_depto_business_entity
+	lineageTag: c3f38222-7b76-48cb-a81a-b35db947644c
+	sourceLineageTag: [dbo].[ft_costos_rrhh_dia_turno_depto_business_entity]
+
+	column businessentityid
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 08f6f821-21ad-4023-bace-5926905e8d49
+		sourceLineageTag: businessentityid
+		summarizeBy: none
+		sourceColumn: businessentityid
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column departmentid
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 4f908001-1fbc-41b7-a5b2-1be62e47664d
+		sourceLineageTag: departmentid
+		summarizeBy: none
+		sourceColumn: departmentid
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column shiftid
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: fc931f20-25b6-4f23-a987-a9cecbc3a8a2
+		sourceLineageTag: shiftid
+		summarizeBy: none
+		sourceColumn: shiftid
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column ratechangedate
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 4668f130-f9c8-420a-996e-03c34aadddd4
+		sourceLineageTag: ratechangedate
+		summarizeBy: none
+		sourceColumn: ratechangedate
+
+		annotation SummarizationSetBy = Automatic
+
+	column rate
+		dataType: double
+		lineageTag: c712af62-ada5-4ba1-90c3-b11d19796ab2
+		sourceLineageTag: rate
+		summarizeBy: sum
+		sourceColumn: rate
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column payfrequency
+		dataType: int64
+		formatString: 0
+		lineageTag: 96f494c8-c48a-4ae5-9611-2cca4ee4d730
+		sourceLineageTag: payfrequency
+		summarizeBy: sum
+		sourceColumn: payfrequency
+
+		annotation SummarizationSetBy = Automatic
+
+	column costo_dia
+		dataType: double
+		lineageTag: fd47d8f0-a075-488e-bb71-9c62e0678d45
+		sourceLineageTag: costo_dia
+		summarizeBy: sum
+		sourceColumn: costo_dia
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column _ingestion_ts
+		dataType: string
+		lineageTag: 55cbcbf1-8033-4c5d-b0d0-498a453dba60
+		sourceLineageTag: _ingestion_ts
+		summarizeBy: none
+		sourceColumn: _ingestion_ts
+
+		annotation SummarizationSetBy = Automatic
+
+	partition ft_costos_rrhh_dia_turno_depto_business_entity = entity
+		mode: directLake
+		source
+			entityName: ft_costos_rrhh_dia_turno_depto_business_entity
+			schemaName: dbo
+			expressionSource: 'DirectLake - Silver_Refined'
+

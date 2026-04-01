@@ -1,0 +1,60 @@
+table dim_turno
+	lineageTag: 5eec9608-e7ec-4c62-bca7-0923024cb882
+	sourceLineageTag: [dbo].[dim_turno]
+
+	column shiftid
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 0353ec40-bc1b-403f-95b9-d30d05643503
+		sourceLineageTag: shiftid
+		summarizeBy: none
+		sourceColumn: shiftid
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column shiftname
+		dataType: string
+		lineageTag: 9c944ac4-2e0f-4746-946c-ec1f3d0a0bdf
+		sourceLineageTag: shiftname
+		summarizeBy: none
+		sourceColumn: shiftname
+
+		annotation SummarizationSetBy = Automatic
+
+	column starttime
+		dataType: string
+		lineageTag: bde587fd-84db-4034-9af4-c2aebbdee97a
+		sourceLineageTag: starttime
+		summarizeBy: none
+		sourceColumn: starttime
+
+		annotation SummarizationSetBy = Automatic
+
+	column endtime
+		dataType: string
+		lineageTag: 5db9d437-5ad0-4d6d-84b4-4ddd6048a989
+		sourceLineageTag: endtime
+		summarizeBy: none
+		sourceColumn: endtime
+
+		annotation SummarizationSetBy = Automatic
+
+	column _ingestion_ts
+		dataType: string
+		lineageTag: b11d927b-6be9-49d6-ab20-48deb483d167
+		sourceLineageTag: _ingestion_ts
+		summarizeBy: none
+		sourceColumn: _ingestion_ts
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dim_turno = entity
+		mode: directLake
+		source
+			entityName: dim_turno
+			schemaName: dbo
+			expressionSource: 'DirectLake - Silver_Refined'
+

@@ -23,7 +23,34 @@
 # META   }
 # META }
 
+# MARKDOWN ********************
+
+# # 🏗️ Pipeline Bronze → Silver · Dominio RRHH
+# ## Workspace DP700 · AdventureWorks Human Resources
+# > **Lakehouse predeterminado:** Silver_Refined  
+# > **Origen:** Bronze_Landing · Files/humanresources  
+# > **Destino:** Silver_Refined · Tables/dbo
+
+# MARKDOWN ********************
+
+# ---
+# ## 📦 Dependencias
+# ### Instalación de librerías no incluidas en el entorno base de Fabric
+
 # CELL ********************
+
+# =============================================================
+# CELDA 0 · Instalación de dependencias
+#
+# fastparquet resuelve el tipo INT64 (TIME(NANOS,true)) exportado
+# por PostgreSQL, que el parser de schema de Spark rechaza.
+# Bug documentado en la comunidad de Fabric sin corrección
+# a nivel de motor a abril 2026.
+#
+# IMPORTANTE: El kernel se reinicia automáticamente tras la
+# instalación. Ejecutar todas las celdas siguientes en orden
+# después del reinicio.
+# =============================================================
 
 %pip install fastparquet
 
@@ -36,6 +63,7 @@
 
 # MARKDOWN ********************
 
+# ---
 # ## 🔧 Configuración del Entorno
 # ### Parámetros de Workspace y Rutas de Acceso
 
@@ -43,16 +71,26 @@
 
 # =============================================================
 # CELDA 1 · Parámetros de workspace
+#
 # Centraliza GUIDs y rutas base. Modificar solo esta sección
 # cuando cambie el workspace, la capa o el dominio de negocio.
+#
+# WORKSPACE_ID  : GUID del área de trabajo DP700
+# BRONZE_ID     : GUID del lakehouse Bronze_Landing
+# SILVER_ID     : GUID del lakehouse Silver_Refined
+# BRONZE_ROOT   : Raíz ABFS de Bronze, agnóstica al dominio
+# DOMAIN_FOLDER : Subcarpeta del dominio activo en Bronze
+# BRONZE_BASE   : Ruta completa al dominio activo
 # =============================================================
 
-# Identificadores únicos del workspace y lakehouses (Fabric Portal → URL)
-WORKSPACE_ID = "f2f1a2a4-28bd-4388-aea2-989b8d2479ff"
-BRONZE_ID    = "f2f5ef99-fa5e-4802-b052-60d3674c2af2"
-SILVER_ID    = "c3abadd9-077d-48dd-a313-40970c5853b4"
+# Identificadores únicos obtenidos desde la URL del Fabric Portal
+WORKSPACE_ID  = "f2f1a2a4-28bd-4388-aea2-989b8d2479ff"
+BRONZE_ID     = "f2f5ef99-fa5e-4802-b052-60d3674c2af2"
+SILVER_ID     = "c3abadd9-077d-48dd-a313-40970c5853b4"
 
-# Raíz ABFS del lakehouse Bronze. Agnóstica al dominio de negocio.
+# Raíz ABFS absoluta de Bronze_Landing.
+# El formato onelake.dfs.fabric.microsoft.com resuelve cualquier
+# lakehouse del tenant independientemente del predeterminado.
 BRONZE_ROOT = (
     f"abfss://{WORKSPACE_ID}"
     f"@onelake.dfs.fabric.microsoft.com"
@@ -62,7 +100,7 @@ BRONZE_ROOT = (
 # Subcarpeta del dominio de negocio activo dentro de Bronze
 DOMAIN_FOLDER = "humanresources"
 
-# Ruta completa al dominio activo dentro de Bronze
+# Ruta completa al dominio activo
 BRONZE_BASE = f"{BRONZE_ROOT}/{DOMAIN_FOLDER}"
 
 print("✅ Parámetros cargados")
@@ -85,6 +123,15 @@ print(f"   Dominio     → {DOMAIN_FOLDER}")
 
 # =============================================================
 # CELDA 2 · Imports y configuración de Spark
+#
+# datetimeRebaseModeInRead : Corrige fechas históricas de sistemas
+#   con calendario juliano (PostgreSQL, Oracle, SQL Server).
+#   Sin esta config, fechas anteriores a 1900 se corrompen
+#   silenciosamente al leer Parquet.
+# int96RebaseModeInRead    : Aplica la misma corrección al formato
+#   INT96 usado por versiones antiguas de Parquet para timestamps.
+# RUN_TS                   : Sello UTC de la ejecución. Propaga
+#   trazabilidad a todas las tablas producidas en este notebook.
 # =============================================================
 
 from pyspark.sql import functions as F
@@ -92,15 +139,9 @@ from pyspark.sql.types import IntegerType, StringType
 import pandas as pd
 from datetime import datetime, timezone
 
-# Corrige la interpretación de fechas históricas provenientes
-# de sistemas con calendario juliano (PostgreSQL, Oracle, SQL Server).
-# Sin esta configuración, fechas anteriores a 1900 se corrompen
-# silenciosamente al leer Parquet.
 spark.conf.set("spark.sql.parquet.datetimeRebaseModeInRead", "CORRECTED")
 spark.conf.set("spark.sql.parquet.int96RebaseModeInRead",   "CORRECTED")
 
-# Sello de tiempo UTC de la ejecución. Propaga trazabilidad
-# a todas las tablas producidas en este notebook.
 RUN_TS = datetime.now(timezone.utc).isoformat()
 
 print("✅ Entorno listo")
@@ -115,14 +156,22 @@ print(f"   Ejecución UTC → {RUN_TS}")
 
 # MARKDOWN ********************
 
-# ### Lectura de Entidades desde Bronze_Landing
+# ---
+# ## 📥 Lectura desde Bronze_Landing
+# ### Entidades estándar
 
 # CELL ********************
 
 # =============================================================
 # CELDA 3 · Lectura de Parquet desde Bronze_Landing
+#
 # Aplica a todas las entidades excepto shift,
 # que requiere tratamiento especial en Celda 4.
+#
+# mergeSchema    : Tolera evolución de schema entre ejecuciones.
+#   Si el origen agrega columnas, el proceso no falla.
+# _ingestion_ts  : Registra cuándo ingresó cada fila al pipeline.
+# _source_entity : Registra el nombre de la entidad de origen.
 # =============================================================
 
 def read_bronze(entity: str):
@@ -144,8 +193,8 @@ def read_bronze(entity: str):
              .format("parquet")
              .option("mergeSchema", "true")
              .load(path)
-             .withColumn("_ingestion_ts",    F.lit(RUN_TS))
-             .withColumn("_source_entity",   F.lit(entity))
+             .withColumn("_ingestion_ts",  F.lit(RUN_TS))
+             .withColumn("_source_entity", F.lit(entity))
     )
 
     print(f"   ✔ {entity:<35} {df.count():>6} filas")
@@ -179,15 +228,22 @@ print("✅ Lectura completada")
 #
 # El tipo INT64 (TIME(NANOS,true)) exportado por PostgreSQL es
 # rechazado por el parser de schema de Spark. Bug documentado
-# en la comunidad de Fabric sin corrección a nivel de motor.
+# en la comunidad de Fabric sin corrección a nivel de motor
+# a abril 2026.
+#
 # fastparquet interpreta TIME(NANOS,true) nativamente y actúa
 # como capa de conversión antes de entregar el DataFrame a Spark.
+#
+# Flujo:
+#   1. fastparquet lee el Parquet desde ABFS (ruta con GUID)
+#   2. Pandas normaliza campos TIME a string "HH:MM:SS"
+#   3. Spark recibe el DataFrame ya con schema compatible
+#   4. Casts explícitos garantizan el schema final esperado
 # =============================================================
 
 print("⚙️  Procesando entidad shift...")
 
-# fastparquet lee desde la ruta ABFS absoluta con GUID.
-# El engine fastparquet resuelve TIME(NANOS,true) sin error.
+# Paso 1: fastparquet lee desde ABFS tolerando TIME(NANOS,true)
 _pdf_shift = pd.read_parquet(
     f"{BRONZE_BASE}/shift",
     engine="fastparquet"
@@ -195,18 +251,18 @@ _pdf_shift = pd.read_parquet(
 
 print(f"   Schema Pandas (antes): { {c: str(t) for c, t in _pdf_shift.dtypes.items()} }")
 
-# Elimina columna no requerida en capas superiores
+# Paso 2a: Elimina columna no requerida en capas superiores
 _pdf_shift = _pdf_shift.drop(columns=["modifieddate"], errors="ignore")
 
-# Convierte campos TIME a string "HH:MM:SS"
+# Paso 2b: Convierte campos TIME a string para compatibilidad con Spark
 for _col in ["starttime", "endtime"]:
     if _col in _pdf_shift.columns:
         _pdf_shift[_col] = _pdf_shift[_col].astype(str)
 
-# Pandas → Spark
+# Paso 3: Pandas → Spark
 df_shift = spark.createDataFrame(_pdf_shift)
 
-# Casts explícitos al schema final + columnas de auditoría
+# Paso 4: Casts explícitos al schema final + columnas de auditoría
 df_shift = (
     df_shift
     .withColumn("shiftid",        F.col("shiftid").cast(IntegerType()))
@@ -229,7 +285,9 @@ print("✅ Entidad shift procesada")
 
 # MARKDOWN ********************
 
-# ### Persistencia en Bronze_Landing como Tablas Delta
+# ---
+# ## 💾 Persistencia en Bronze_Landing
+# ### Materialización como Tablas Delta en el Catálogo de Spark
 
 # CELL ********************
 
@@ -238,14 +296,16 @@ print("✅ Entidad shift procesada")
 #
 # Convierte los archivos Parquet no administrados (Files) en
 # tablas Delta registradas en el catálogo de Spark bajo el
-# schema bronze_landing. Esto habilita consultas SQL directas
+# schema bronze_landing. Habilita consultas SQL directas
 # desde cualquier notebook o pipeline que referencie Bronze.
+#
+# DOMAIN          : Prefijo de dominio aplicado a nombres de tabla.
+# overwriteSchema : Tolera cambios de schema entre ejecuciones.
 #
 # Las columnas de auditoría (_ingestion_ts, _source_entity)
 # se excluyen de Bronze — su destino es Silver.
 # =============================================================
 
-# Prefijo aplicado a todos los nombres de tabla en Bronze
 DOMAIN = "hr"
 
 def save_to_bronze(df, entity_name: str):
@@ -289,7 +349,9 @@ print("✅ Bronze materializado en catálogo")
 
 # MARKDOWN ********************
 
-# ### Transformaciones Silver: Modelo Dimensional
+# ---
+# ## 🔄 Transformaciones Silver
+# ### Construcción del Modelo Dimensional
 
 # CELL ********************
 
@@ -297,10 +359,13 @@ print("✅ Bronze materializado en catálogo")
 # CELDA 6 · Construcción del modelo dimensional en Silver
 #
 # Produce 4 objetos analíticos desde las tablas Delta de Bronze:
-#   · ft_costos_rrhh_dia  → tabla de hechos (granularidad diaria)
-#   · dim_trabajador      → dimensión de empleados
-#   · dim_departamento    → dimensión de departamentos
-#   · dim_turno           → dimensión de turnos
+#   · ft_costos_rrhh_dia_turno_depto_business_entity
+#       Tabla de hechos con granularidad diaria por empleado,
+#       departamento y turno. Calcula costo_dia según
+#       la frecuencia de pago del empleado.
+#   · dim_trabajador   → fechas de inicio y término por empleado
+#   · dim_departamento → catálogo de departamentos y grupos
+#   · dim_turno        → catálogo de turnos con horarios
 #
 # Todas las consultas referencian bronze_landing para mantener
 # la separación de capas. Silver no lee desde Files directamente.
@@ -361,10 +426,10 @@ df_dim_turno = spark.sql(f"""
     FROM bronze_landing.hr_shift
 """)
 
-print(f"   ✔ ft_costos_rrhh_dia   → {df_ft_costos.count():>6} filas")
-print(f"   ✔ dim_trabajador       → {df_dim_trabajador.count():>6} filas")
-print(f"   ✔ dim_departamento     → {df_dim_departamento.count():>6} filas")
-print(f"   ✔ dim_turno            → {df_dim_turno.count():>6} filas")
+print(f"   ✔ ft_costos_rrhh_dia_turno_depto_business_entity → {df_ft_costos.count():>6} filas")
+print(f"   ✔ dim_trabajador                                 → {df_dim_trabajador.count():>6} filas")
+print(f"   ✔ dim_departamento                               → {df_dim_departamento.count():>6} filas")
+print(f"   ✔ dim_turno                                      → {df_dim_turno.count():>6} filas")
 print("✅ Transformaciones completadas")
 
 # METADATA ********************
@@ -383,35 +448,36 @@ print("✅ Transformaciones completadas")
 # =============================================================
 # CELDA 7 · Persistencia del modelo dimensional en Silver_Refined
 #
-# Silver_Refined debe ser el lakehouse predeterminado del notebook
-# para que saveAsTable resuelva el schema silver_refined
-# correctamente sin requerir rutas absolutas.
+# Las tablas se escriben sin prefijo de schema para que Fabric
+# las registre bajo dbo, el schema predeterminado del lakehouse.
+# Esto las hace visibles en el selector de modelo semántico
+# y las coloca directamente bajo Tables/dbo sin subcarpetas.
+#
+# Silver_Refined debe ser el lakehouse predeterminado del notebook.
 # =============================================================
 
 def save_to_silver(df, table_name: str):
     """
-    Persiste un DataFrame como tabla Delta en silver_refined.
+    Persiste un DataFrame como tabla Delta en Silver_Refined.
+    Registra la tabla bajo dbo para visibilidad en modelo semántico.
 
     Args:
         df:           DataFrame de Spark con columnas de auditoría.
-        table_name:   Nombre de la tabla destino en silver_refined.
+        table_name:   Nombre de la tabla destino.
     """
-    full_name = f"silver_refined.{table_name}"
-
     (
         df.write
           .format("delta")
           .mode("overwrite")
           .option("overwriteSchema", "true")
-          .saveAsTable(full_name)
+          .saveAsTable(table_name)
     )
-    print(f"   ✔ {full_name}")
+    print(f"   ✔ {table_name}")
 
 
 print("💾 Escribiendo tablas Delta en Silver_Refined...")
-spark.sql("CREATE SCHEMA IF NOT EXISTS silver_refined")
 
-save_to_silver(df_ft_costos,        "ft_costos_rrhh_dia")
+save_to_silver(df_ft_costos,        "ft_costos_rrhh_dia_turno_depto_business_entity")
 save_to_silver(df_dim_trabajador,   "dim_trabajador")
 save_to_silver(df_dim_departamento, "dim_departamento")
 save_to_silver(df_dim_turno,        "dim_turno")
@@ -427,7 +493,8 @@ print("✅ Silver_Refined actualizado")
 
 # MARKDOWN ********************
 
-# ### Verificación y Resumen de Ejecución
+# ---
+# ## ✅ Verificación y Resumen de Ejecución
 
 # CELL ********************
 
@@ -435,33 +502,34 @@ print("✅ Silver_Refined actualizado")
 # CELDA 8 · Verificación del resultado y resumen de ejecución
 #
 # Valida que cada tabla Silver existe y contiene datos.
+# Los nombres de tabla se referencian sin prefijo de schema
+# porque residen bajo dbo, el schema predeterminado del lakehouse.
+#
 # En producción este bloque se reemplaza por un framework
 # de calidad de datos (Great Expectations, Fabric DQ Rules).
 # =============================================================
 
 TABLAS_SILVER = [
-    ("silver_refined.ft_costos_rrhh_dia",  "Tabla de Hechos"),
-    ("silver_refined.dim_trabajador",       "Dimensión"),
-    ("silver_refined.dim_departamento",     "Dimensión"),
-    ("silver_refined.dim_turno",            "Dimensión"),
+    ("ft_costos_rrhh_dia_turno_depto_business_entity", "Tabla de Hechos"),
+    ("dim_trabajador",                                  "Dimensión"),
+    ("dim_departamento",                                "Dimensión"),
+    ("dim_turno",                                       "Dimensión"),
 ]
 
-print("=" * 55)
+print("=" * 65)
 print("  RESUMEN DE EJECUCIÓN")
-print("=" * 55)
+print("=" * 65)
 
 for tabla, tipo in TABLAS_SILVER:
     count = spark.sql(f"SELECT COUNT(*) AS n FROM {tabla}").collect()[0]["n"]
-    nombre = tabla.split(".")[1]
-    print(f"  {nombre:<38} {count:>5} filas  [{tipo}]")
+    print(f"  {tabla:<50} {count:>5} filas  [{tipo}]")
 
-print("=" * 55)
+print("=" * 65)
 print(f"  Timestamp : {RUN_TS}")
 print(f"  Estado    : ✅ COMPLETADO")
-print("=" * 55)
+print("=" * 65)
 
-# Vista previa de la tabla de hechos
-display(spark.sql("SELECT * FROM silver_refined.ft_costos_rrhh_dia LIMIT 10"))
+display(spark.sql("SELECT * FROM ft_costos_rrhh_dia_turno_depto_business_entity LIMIT 10"))
 
 # METADATA ********************
 

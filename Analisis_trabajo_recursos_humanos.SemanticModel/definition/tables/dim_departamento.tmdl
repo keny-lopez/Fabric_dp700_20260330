@@ -1,0 +1,51 @@
+table dim_departamento
+	lineageTag: 988e9447-524b-4206-a252-65bc0c6705a6
+	sourceLineageTag: [dbo].[dim_departamento]
+
+	column departmentid
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: cfad3e7c-0021-4290-a71f-29f93a4a0c97
+		sourceLineageTag: departmentid
+		summarizeBy: none
+		sourceColumn: departmentid
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column departmentname
+		dataType: string
+		lineageTag: 17b9dcaf-4654-4875-a78c-76f9e4cba401
+		sourceLineageTag: departmentname
+		summarizeBy: none
+		sourceColumn: departmentname
+
+		annotation SummarizationSetBy = Automatic
+
+	column groupname
+		dataType: string
+		lineageTag: 8e00a402-8a14-4441-a1a0-60afedc86000
+		sourceLineageTag: groupname
+		summarizeBy: none
+		sourceColumn: groupname
+
+		annotation SummarizationSetBy = Automatic
+
+	column _ingestion_ts
+		dataType: string
+		lineageTag: ae5f35c1-a19f-41fb-849b-404dd40d17a2
+		sourceLineageTag: _ingestion_ts
+		summarizeBy: none
+		sourceColumn: _ingestion_ts
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dim_departamento = entity
+		mode: directLake
+		source
+			entityName: dim_departamento
+			schemaName: dbo
+			expressionSource: 'DirectLake - Silver_Refined'
+
