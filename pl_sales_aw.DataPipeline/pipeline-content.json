@@ -1,0 +1,197 @@
+{
+  "properties": {
+    "activities": [
+      {
+        "type": "InvokeCopyJob",
+        "typeProperties": {
+          "copyJobId": "0f853ba1-a2d1-8f4e-4b02-cfedaaa8491d",
+          "workspaceId": "00000000-0000-0000-0000-000000000000"
+        },
+        "externalReferences": {
+          "connection": "51456cf6-d731-4ae1-bb28-35cbbd593033"
+        },
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "Copy job_f0d",
+        "dependsOn": []
+      },
+      {
+        "type": "Copy",
+        "typeProperties": {
+          "source": {
+            "type": "AzurePostgreSqlSource",
+            "partitionOption": "None",
+            "queryTimeout": "02:00:00",
+            "datasetSettings": {
+              "type": "AzurePostgreSqlTable",
+              "typeProperties": {
+                "table": "currencyrate",
+                "schema": "sales"
+              },
+              "version": "2.0",
+              "schema": [],
+              "externalReferences": {
+                "connection": "e12bf233-fd24-436e-bf61-d32b59d1c7b9"
+              },
+              "annotations": []
+            }
+          },
+          "sink": {
+            "type": "ParquetSink",
+            "formatSettings": {
+              "type": "ParquetWriteSettings",
+              "enableVertiParquet": true
+            },
+            "storeSettings": {
+              "type": "AzureBlobStorageWriteSettings"
+            },
+            "datasetSettings": {
+              "type": "Parquet",
+              "typeProperties": {
+                "location": {
+                  "type": "LakehouseLocation",
+                  "folderPath": "sales",
+                  "fileName": "currencyrate"
+                },
+                "compressionCodec": "snappy"
+              },
+              "schema": [],
+              "connectionSettings": {
+                "name": "Bronze_Landing",
+                "properties": {
+                  "type": "Lakehouse",
+                  "typeProperties": {
+                    "artifactId": "674c2af2-60d3-b052-4802-fa5ef2f5ef99",
+                    "workspaceId": "00000000-0000-0000-0000-000000000000",
+                    "rootFolder": "Files"
+                  },
+                  "externalReferences": {
+                    "connection": "e209fdc5-c2c9-404e-a08e-f6e5600ef0a2"
+                  },
+                  "annotations": []
+                }
+              },
+              "annotations": []
+            }
+          },
+          "translator": {
+            "type": "TabularTranslator",
+            "mappings": [
+              {
+                "source": {
+                  "name": "currencyrateid",
+                  "type": "Int32",
+                  "physicalType": "integer"
+                },
+                "sink": {
+                  "name": "currencyrateid",
+                  "type": "Int32",
+                  "physicalType": "INT_32"
+                }
+              },
+              {
+                "source": {
+                  "name": "currencyratedate",
+                  "type": "DateTime",
+                  "physicalType": "timestamp without time zone"
+                },
+                "sink": {
+                  "name": "currencyratedate",
+                  "type": "DateTime",
+                  "physicalType": "INT96"
+                }
+              },
+              {
+                "source": {
+                  "name": "fromcurrencycode",
+                  "type": "String",
+                  "physicalType": "character"
+                },
+                "sink": {
+                  "name": "fromcurrencycode",
+                  "type": "String",
+                  "physicalType": "STRING"
+                }
+              },
+              {
+                "source": {
+                  "name": "tocurrencycode",
+                  "type": "String",
+                  "physicalType": "character"
+                },
+                "sink": {
+                  "name": "tocurrencycode",
+                  "type": "String",
+                  "physicalType": "STRING"
+                }
+              },
+              {
+                "source": {
+                  "name": "averagerate",
+                  "type": "Decimal",
+                  "physicalType": "numeric"
+                },
+                "sink": {
+                  "name": "averagerate",
+                  "type": "Decimal",
+                  "physicalType": "DECIMAL"
+                }
+              },
+              {
+                "source": {
+                  "name": "endofdayrate",
+                  "type": "Decimal",
+                  "physicalType": "numeric"
+                },
+                "sink": {
+                  "name": "endofdayrate",
+                  "type": "Decimal",
+                  "physicalType": "DECIMAL"
+                }
+              },
+              {
+                "source": {
+                  "name": "modifieddate",
+                  "type": "DateTime",
+                  "physicalType": "timestamp without time zone"
+                },
+                "sink": {
+                  "name": "modifieddate",
+                  "type": "DateTime",
+                  "physicalType": "INT96"
+                }
+              }
+            ],
+            "typeConversion": true,
+            "typeConversionSettings": {
+              "allowDataTruncation": true,
+              "treatBooleanAsNumber": false
+            }
+          },
+          "enableStaging": false
+        },
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "Copy data1",
+        "dependsOn": [
+          {
+            "activity": "Copy job_f0d",
+            "dependencyConditions": [
+              "Completed"
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}
