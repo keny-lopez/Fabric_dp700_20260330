@@ -1,0 +1,5 @@
+relationship d43868ac-7847-2acf-897f-0d9ab9454e2c
+	isActive: false
+	fromColumn: ft_sales_dia_orden.salesreasonid
+	toColumn: dim_salesreason.salesreasonid
+

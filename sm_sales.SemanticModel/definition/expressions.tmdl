@@ -1,0 +1,11 @@
+expression 'DirectLake - Silver_Refined' =
+		let
+		    Source = AzureStorage.DataLake("https://onelake.dfs.fabric.microsoft.com/f2f1a2a4-28bd-4388-aea2-989b8d2479ff/c3abadd9-077d-48dd-a313-40970c5853b4", [HierarchicalNavigation=true])
+		in
+		    Source
+	lineageTag: 8cef1b55-d77d-43fe-aad7-d9b2cf7619ec
+
+	annotation PBI_IncludeFutureArtifacts = False
+
+	annotation PBI_RemovedChildren = [{"remoteItemId":{"analysisServicesObject":{"sourceName":null,"sourceLineageTag":"[dbo].[ft_tipo_cambio_dia]"}},"objectType":"Table"},{"remoteItemId":{"analysisServicesObject":{"sourceName":null,"sourceLineageTag":"[dbo].[dim_monedas]"}},"objectType":"Table"},{"remoteItemId":{"analysisServicesObject":{"sourceName":null,"sourceLineageTag":"[dbo].[dim_tarjeta_credito]"}},"objectType":"Table"},{"remoteItemId":{"analysisServicesObject":{"sourceName":null,"sourceLineageTag":"[dbo].[dim_cliente_tcredito]"}},"objectType":"Table"},{"remoteItemId":{"analysisServicesObject":{"sourceName":null,"sourceLineageTag":"[dbo].[dim_turno]"}},"objectType":"Table"},{"remoteItemId":{"analysisServicesObject":{"sourceName":null,"sourceLineageTag":"[dbo].[ft_costos_rrhh_dia_turno_depto_business_entity]"}},"objectType":"Table"},{"remoteItemId":{"analysisServicesObject":{"sourceName":null,"sourceLineageTag":"[dbo].[dim_trabajador]"}},"objectType":"Table"},{"remoteItemId":{"analysisServicesObject":{"sourceName":null,"sourceLineageTag":"[dbo].[dim_departamento]"}},"objectType":"Table"}]
+

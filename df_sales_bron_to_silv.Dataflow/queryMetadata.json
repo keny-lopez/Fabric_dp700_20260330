@@ -1,0 +1,104 @@
+{
+  "formatVersion": "202502",
+  "computeEngineSettings": {
+    "allowModernEvaluationEngine": true
+  },
+  "name": "df_sales_bron_to_silv",
+  "queryGroups": [],
+  "documentLocale": "es-ES",
+  "queriesMetadata": {
+    "ft_sales_dia_orden": {
+      "queryId": "72b9e349-aa1e-4d03-a5eb-d433dc77f62c",
+      "queryName": "ft_sales_dia_orden",
+      "loadEnabled": false
+    },
+    "dim_salesreason": {
+      "queryId": "f76a3406-d263-47bd-9be7-8861ee18ac9c",
+      "queryName": "dim_salesreason",
+      "loadEnabled": false
+    },
+    "sales_shoppingcartitem": {
+      "queryId": "7137a4e8-3ca1-41ab-b111-b9fe0a1de6bf",
+      "queryName": "sales_shoppingcartitem",
+      "loadEnabled": false
+    },
+    "sales_countryregioncurrency": {
+      "queryId": "638f5683-d1a8-45c7-8597-1c5e7942a683",
+      "queryName": "sales_countryregioncurrency",
+      "loadEnabled": false
+    },
+    "dim_tarjeta_credito": {
+      "queryId": "93a2169e-d84f-4240-b004-1f51906dd5ad",
+      "queryName": "dim_tarjeta_credito",
+      "loadEnabled": false
+    },
+    "dim_monedas": {
+      "queryId": "09108c84-c5ca-4bfd-b74e-27955d932ad2",
+      "queryName": "dim_monedas",
+      "loadEnabled": false
+    },
+    "ft_tipo_cambio_dia": {
+      "queryId": "86bd4fe8-c1ce-442d-a13f-fe8a27a26e83",
+      "queryName": "ft_tipo_cambio_dia",
+      "loadEnabled": false
+    },
+    "dim_cliente_tcredito": {
+      "queryId": "0402014e-ee5a-4e2d-b58b-16c1b5f8fee2",
+      "queryName": "dim_cliente_tcredito",
+      "loadEnabled": false
+    },
+    "sales_customer": {
+      "queryId": "a834a940-23db-4adb-b640-0e5149ceb171",
+      "queryName": "sales_customer",
+      "loadEnabled": false
+    },
+    "sales_specialoffer": {
+      "queryId": "fe701fd4-0be4-4295-9545-df7d3beb7240",
+      "queryName": "sales_specialoffer",
+      "loadEnabled": false
+    },
+    "ft_sales_dia_orden_DataDestination": {
+      "queryId": "9fc20518-738b-49b1-a27d-1dadd08c6652",
+      "queryName": "ft_sales_dia_orden_DataDestination",
+      "isHidden": true,
+      "loadEnabled": false
+    },
+    "dim_salesreason_DataDestination": {
+      "queryId": "436833c6-4f5d-4525-b67e-8ba6dab7dafd",
+      "queryName": "dim_salesreason_DataDestination",
+      "isHidden": true,
+      "loadEnabled": false
+    },
+    "dim_tarjeta_credito_DataDestination": {
+      "queryId": "cef2c6c1-6f28-4549-91f6-94452ba5198d",
+      "queryName": "dim_tarjeta_credito_DataDestination",
+      "isHidden": true,
+      "loadEnabled": false
+    },
+    "dim_monedas_DataDestination": {
+      "queryId": "0f5b7ebd-6422-4ab2-a8eb-fce48bbd0398",
+      "queryName": "dim_monedas_DataDestination",
+      "isHidden": true,
+      "loadEnabled": false
+    },
+    "ft_tipo_cambio_dia_DataDestination": {
+      "queryId": "82a12401-baf5-4cb6-92c8-6a971e1cfe9d",
+      "queryName": "ft_tipo_cambio_dia_DataDestination",
+      "isHidden": true,
+      "loadEnabled": false
+    },
+    "dim_cliente_tcredito_DataDestination": {
+      "queryId": "566fb040-3b2f-4f98-9c64-fea824853e46",
+      "queryName": "dim_cliente_tcredito_DataDestination",
+      "isHidden": true,
+      "loadEnabled": false
+    }
+  },
+  "connections": [
+    {
+      "path": "Lakehouse",
+      "kind": "Lakehouse",
+      "connectionId": "{\"ClusterId\":\"e71d6571-d7e1-4f40-8765-c7dc3df033d3\",\"DatasourceId\":\"e209fdc5-c2c9-404e-a08e-f6e5600ef0a2\"}"
+    }
+  ]
+}
