@@ -1,0 +1,131 @@
+{
+  "schema_version": 69,
+  "tiles": [
+    {
+      "id": "59efeeb9-b131-4792-bdd8-eaa845d20934",
+      "title": "New Tile",
+      "visualType": "table",
+      "pageId": "3b35337b-e3b7-4ebd-94d4-737558750716",
+      "layout": {
+        "x": 11,
+        "y": 0,
+        "width": 11,
+        "height": 9
+      },
+      "queryRef": {
+        "kind": "query",
+        "queryId": "8d6d84f3-50cb-427b-9ba2-3a3286cae190"
+      },
+      "visualOptions": {
+        "selectedDataOnLoad": {
+          "all": true,
+          "limit": 10
+        }
+      }
+    },
+    {
+      "id": "1bd049a8-e447-4512-9413-df173060bea5",
+      "title": "Nuevo icono",
+      "visualType": "line",
+      "pageId": "3b35337b-e3b7-4ebd-94d4-737558750716",
+      "layout": {
+        "x": 0,
+        "y": 0,
+        "width": 11,
+        "height": 9
+      },
+      "queryRef": {
+        "kind": "query",
+        "queryId": "332405a2-b009-46fa-8aa7-dd934ed0513b"
+      },
+      "visualOptions": {
+        "multipleYAxes": {
+          "base": {
+            "id": "-1",
+            "label": "",
+            "columns": [],
+            "yAxisMaximumValue": null,
+            "yAxisMinimumValue": null,
+            "yAxisScale": "linear",
+            "horizontalLines": []
+          },
+          "additional": [],
+          "showMultiplePanels": false
+        },
+        "seriesColors": {},
+        "hideLegend": false,
+        "legendLocation": "bottom",
+        "xColumnTitle": "",
+        "xColumn": "Hora_Num",
+        "yColumns": null,
+        "seriesColumns": [
+          "Dia_Nombre",
+          "dt_objeto"
+        ],
+        "xAxisScale": "linear",
+        "verticalLine": "",
+        "crossFilter": [],
+        "crossFilterDisabled": false,
+        "drillthroughDisabled": false,
+        "forceAxisTicks": false,
+        "drillthrough": []
+      }
+    }
+  ],
+  "baseQueries": [],
+  "parameters": [
+    {
+      "kind": "duration",
+      "id": "4c955e2b-9c55-4ef3-9ee5-5461a4864bc3",
+      "displayName": "Intervalo de tiempo",
+      "description": "",
+      "beginVariableName": "_startTime",
+      "endVariableName": "_endTime",
+      "defaultValue": {
+        "kind": "dynamic",
+        "count": 1,
+        "unit": "hours"
+      },
+      "showOnPages": {
+        "kind": "all"
+      }
+    }
+  ],
+  "dataSources": [
+    {
+      "kind": "kusto-trident",
+      "id": "1d59ee2f-abc8-45ab-8692-755e9d709ca9",
+      "name": "eh_analitica_streaming",
+      "clusterUri": "",
+      "database": "e1d8a1cc-ac9d-adee-47a1-9c081ef74b1a",
+      "workspace": "00000000-0000-0000-0000-000000000000",
+      "scopeId": "kusto-trident"
+    }
+  ],
+  "pages": [
+    {
+      "name": "Página 1",
+      "id": "3b35337b-e3b7-4ebd-94d4-737558750716"
+    }
+  ],
+  "queries": [
+    {
+      "dataSource": {
+        "kind": "inline",
+        "dataSourceId": "1d59ee2f-abc8-45ab-8692-755e9d709ca9"
+      },
+      "text": "hot_meteorologia\n| extend \n    // 1. Tipado de Datos Críticos (Casting)\n    dt_objeto = todatetime(dateTime),\n    Temp_Valor = todouble(temperature.value),\n    Temp_Unidad = tostring(temperature.unitLabel),\n    Latitud = todouble(location.latitude),\n    Longitud = todouble(location.longitude),\n    Estacion = tostring(location.stationName)\n| extend \n    // 2. Jerarquía Temporal para Power BI (Dimensiones de Tiempo)\n    Fecha = startofday(dt_objeto),\n    Anio = datetime_part(\"year\", dt_objeto),\n    Mes_Num = datetime_part(\"month\", dt_objeto),\n    Mes_Nombre = format_datetime(dt_objeto, 'MMMM'),\n    Dia_Nombre = format_datetime(dt_objeto, 'dddd'),\n    Hora_Num = datetime_part(\"hour\", dt_objeto),\n    Es_Fin_Semana = iif(dayofweek(dt_objeto) >= 6d, \"SÍ\", \"NO\")\n| extend \n    // 3. Lógica de Negocio (KPIs Visuales)\n    Alerta_Calor = iif(Temp_Valor > 30, \"Crítico\", \"Normal\")\n| project \n    dt_objeto, \n    Fecha, \n    Anio, \n    Mes_Num, \n    Mes_Nombre, \n    Dia_Nombre, \n    Hora_Num, \n    Es_Fin_Semana, \n    Estacion, \n    Temp_Valor, \n    Temp_Unidad, \n    Alerta_Calor, \n    Latitud, \n    Longitud\n| sort by dt_objeto desc",
+      "id": "8d6d84f3-50cb-427b-9ba2-3a3286cae190",
+      "usedVariables": []
+    },
+    {
+      "dataSource": {
+        "kind": "inline",
+        "dataSourceId": "1d59ee2f-abc8-45ab-8692-755e9d709ca9"
+      },
+      "text": "hot_meteorologia\n| extend \n    // 1. Tipado de Datos Críticos (Casting)\n    dt_objeto = todatetime(dateTime),\n    Temp_Valor = todouble(temperature.value),\n    Temp_Unidad = tostring(temperature.unitLabel),\n    Latitud = todouble(location.latitude),\n    Longitud = todouble(location.longitude),\n    Estacion = tostring(location.stationName)\n| extend \n    // 2. Jerarquía Temporal para Power BI (Dimensiones de Tiempo)\n    Fecha = startofday(dt_objeto),\n    Anio = datetime_part(\"year\", dt_objeto),\n    Mes_Num = datetime_part(\"month\", dt_objeto),\n    Mes_Nombre = format_datetime(dt_objeto, 'MMMM'),\n    Dia_Nombre = format_datetime(dt_objeto, 'dddd'),\n    Hora_Num = datetime_part(\"hour\", dt_objeto),\n    Es_Fin_Semana = iif(dayofweek(dt_objeto) >= 6d, \"SÍ\", \"NO\")\n| extend \n    // 3. Lógica de Negocio (KPIs Visuales)\n    Alerta_Calor = iif(Temp_Valor > 30, \"Crítico\", \"Normal\")\n| project \n    dt_objeto, \n    Fecha, \n    Anio, \n    Mes_Num, \n    Mes_Nombre, \n    Dia_Nombre, \n    Hora_Num, \n    Es_Fin_Semana, \n    Estacion, \n    Temp_Valor, \n    Temp_Unidad, \n    Alerta_Calor, \n    Latitud, \n    Longitud\n| sort by dt_objeto desc\n",
+      "id": "332405a2-b009-46fa-8aa7-dd934ed0513b",
+      "usedVariables": []
+    }
+  ]
+}
