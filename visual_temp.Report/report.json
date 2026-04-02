@@ -1,0 +1,69 @@
+{
+  "config": "{\"version\":\"5.72\",\"themeCollection\":{\"baseTheme\":{\"name\":\"CY26SU04\",\"version\":{\"visual\":\"2.8.0\",\"report\":\"3.2.0\",\"page\":\"2.3.1\"},\"type\":2}},\"activeSectionIndex\":0,\"defaultDrillFilterOtherVisuals\":true,\"settings\":{\"useNewFilterPaneExperience\":true,\"allowChangeFilterTypes\":true,\"useStylableVisualContainerHeader\":true,\"queryLimitOption\":6,\"useEnhancedTooltips\":true,\"exportDataMode\":1,\"useDefaultAggregateDisplayName\":true},\"objects\":{\"section\":[{\"properties\":{\"verticalAlignment\":{\"expr\":{\"Literal\":{\"Value\":\"'Top'\"}}}}}],\"outspacePane\":[{\"properties\":{\"expanded\":{\"expr\":{\"Literal\":{\"Value\":\"false\"}}}}}]}}",
+  "layoutOptimization": 0,
+  "resourcePackages": [
+    {
+      "resourcePackage": {
+        "disabled": false,
+        "items": [
+          {
+            "name": "CY26SU04",
+            "path": "BaseThemes/CY26SU04.json",
+            "type": 202
+          }
+        ],
+        "name": "SharedResources",
+        "type": 2
+      }
+    }
+  ],
+  "sections": [
+    {
+      "config": "{}",
+      "displayName": "Página 1",
+      "displayOption": 1,
+      "filters": "[]",
+      "height": 720.00,
+      "name": "96129548ebe9e533fd27",
+      "visualContainers": [
+        {
+          "config": "{\"name\":\"1959391e8e02c5b1f1a7\",\"layouts\":[{\"id\":0,\"position\":{\"x\":2.045392125040573,\"y\":53.55897012558987,\"z\":0,\"width\":750.640501360765,\"height\":666.4088309280668,\"tabOrder\":0}}],\"singleVisual\":{\"visualType\":\"azureMap\",\"projections\":{\"Y\":[{\"queryRef\":\"Kusto Query Result.Latitud\"}],\"X\":[{\"queryRef\":\"Kusto Query Result.Longitud\"}],\"Series\":[{\"queryRef\":\"Kusto Query Result.Alerta_Calor\"}],\"Size\":[{\"queryRef\":\"Sum(Kusto Query Result.Temp_Valor)\"}],\"Tooltips\":[{\"queryRef\":\"Min(Kusto Query Result.Estacion)\"},{\"queryRef\":\"Sum(Kusto Query Result.Temp_Valor)\"},{\"queryRef\":\"Min(Kusto Query Result.Temp_Unidad)\"}]},\"prototypeQuery\":{\"Version\":2,\"From\":[{\"Name\":\"k\",\"Entity\":\"Kusto Query Result\",\"Type\":0}],\"Select\":[{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"k\"}},\"Property\":\"Latitud\"},\"Name\":\"Kusto Query Result.Latitud\",\"NativeReferenceName\":\"Latitud\"},{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"k\"}},\"Property\":\"Longitud\"},\"Name\":\"Kusto Query Result.Longitud\",\"NativeReferenceName\":\"Longitud\"},{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"k\"}},\"Property\":\"Alerta_Calor\"},\"Name\":\"Kusto Query Result.Alerta_Calor\",\"NativeReferenceName\":\"Alerta_Calor\"},{\"Aggregation\":{\"Expression\":{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"k\"}},\"Property\":\"Temp_Valor\"}},\"Function\":0},\"Name\":\"Sum(Kusto Query Result.Temp_Valor)\",\"NativeReferenceName\":\"Suma de Temp_Valor\"},{\"Aggregation\":{\"Expression\":{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"k\"}},\"Property\":\"Estacion\"}},\"Function\":3},\"Name\":\"Min(Kusto Query Result.Estacion)\",\"NativeReferenceName\":\"Primera fecha: Estacion\"},{\"Aggregation\":{\"Expression\":{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"k\"}},\"Property\":\"Temp_Unidad\"}},\"Function\":3},\"Name\":\"Min(Kusto Query Result.Temp_Unidad)\",\"NativeReferenceName\":\"Primera fecha: Temp_Unidad\"}]},\"drillFilterOtherVisuals\":true,\"objects\":{\"mapControls\":[{\"properties\":{\"zoom\":{\"expr\":{\"Literal\":{\"Value\":\"15D\"}}},\"centerLatitude\":{\"expr\":{\"Literal\":{\"Value\":\"14.110002470387471D\"}}},\"centerLongitude\":{\"expr\":{\"Literal\":{\"Value\":\"-87.20000982284546D\"}}}}}]}}}",
+          "filters": "[]",
+          "height": 666.41,
+          "width": 750.64,
+          "x": 2.05,
+          "y": 53.56,
+          "z": 0.00
+        },
+        {
+          "config": "{\"name\":\"25b59102df19760f47e8\",\"layouts\":[{\"id\":0,\"position\":{\"x\":753.0830690869142,\"y\":176.66128810766273,\"z\":1,\"width\":517.4801168510149,\"height\":327.23819530099126,\"tabOrder\":1}}],\"singleVisual\":{\"visualType\":\"areaChart\",\"projections\":{\"Category\":[{\"queryRef\":\"Kusto Query Result.dt_objeto\",\"active\":true}],\"Y\":[{\"queryRef\":\"Sum(Kusto Query Result.Temp_Valor)\"}],\"Series\":[{\"queryRef\":\"Kusto Query Result.Hora_Num\"}]},\"prototypeQuery\":{\"Version\":2,\"From\":[{\"Name\":\"k\",\"Entity\":\"Kusto Query Result\",\"Type\":0}],\"Select\":[{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"k\"}},\"Property\":\"dt_objeto\"},\"Name\":\"Kusto Query Result.dt_objeto\",\"NativeReferenceName\":\"dt_objeto\"},{\"Aggregation\":{\"Expression\":{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"k\"}},\"Property\":\"Temp_Valor\"}},\"Function\":0},\"Name\":\"Sum(Kusto Query Result.Temp_Valor)\",\"NativeReferenceName\":\"Suma de Temp_Valor\"},{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"k\"}},\"Property\":\"Hora_Num\"},\"Name\":\"Kusto Query Result.Hora_Num\",\"NativeReferenceName\":\"Hora_Num\"}],\"OrderBy\":[{\"Direction\":1,\"Expression\":{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"k\"}},\"Property\":\"dt_objeto\"}}}]},\"drillFilterOtherVisuals\":true,\"hasDefaultSort\":true}}",
+          "filters": "[]",
+          "height": 327.24,
+          "width": 517.48,
+          "x": 753.08,
+          "y": 176.66,
+          "z": 1.00
+        },
+        {
+          "config": "{\"name\":\"dcbb1097fd5527e6b756\",\"layouts\":[{\"id\":0,\"position\":{\"x\":753,\"y\":27,\"width\":517,\"height\":150,\"z\":3,\"tabOrder\":3}}],\"singleVisual\":{\"visualType\":\"slicer\",\"projections\":{\"Values\":[{\"queryRef\":\"Kusto Query Result.Fecha\",\"active\":true},{\"queryRef\":\"Kusto Query Result.Hora_Num\",\"active\":true}]},\"prototypeQuery\":{\"Version\":2,\"From\":[{\"Name\":\"k\",\"Entity\":\"Kusto Query Result\",\"Type\":0}],\"Select\":[{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"k\"}},\"Property\":\"Fecha\"},\"Name\":\"Kusto Query Result.Fecha\",\"NativeReferenceName\":\"Fecha\"},{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"k\"}},\"Property\":\"Hora_Num\"},\"Name\":\"Kusto Query Result.Hora_Num\",\"NativeReferenceName\":\"Hora_Num\"}],\"OrderBy\":[{\"Direction\":1,\"Expression\":{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"k\"}},\"Property\":\"Fecha\"}}}]},\"expansionStates\":[{\"roles\":[\"Values\"],\"levels\":[{\"queryRefs\":[\"Kusto Query Result.Fecha\"],\"isCollapsed\":true,\"identityKeys\":[{\"Column\":{\"Expression\":{\"SourceRef\":{\"Entity\":\"Kusto Query Result\"}},\"Property\":\"Fecha\"}}],\"isPinned\":true},{\"queryRefs\":[\"Kusto Query Result.Hora_Num\"],\"isCollapsed\":true,\"isPinned\":true}],\"root\":{\"identityValues\":null,\"children\":[{\"identityValues\":[{\"Literal\":{\"Value\":\"datetime'2026-04-02T00:00:00'\"}}],\"isToggled\":true}]}}],\"drillFilterOtherVisuals\":true,\"hasDefaultSort\":true,\"objects\":{\"data\":[{\"properties\":{\"mode\":{\"expr\":{\"Literal\":{\"Value\":\"'Basic'\"}}}}}],\"general\":[{\"properties\":{\"orientation\":{\"expr\":{\"Literal\":{\"Value\":\"0D\"}}}}}]}}}",
+          "filters": "[]",
+          "height": 150.00,
+          "width": 517.00,
+          "x": 753.00,
+          "y": 27.00,
+          "z": 3.00
+        },
+        {
+          "config": "{\"name\":\"e20f1124fb031ba5679b\",\"layouts\":[{\"id\":0,\"position\":{\"x\":762.9312626401338,\"y\":530.4383785673267,\"z\":2,\"width\":517.4801168510149,\"height\":189.52942248632993,\"tabOrder\":2}}],\"singleVisual\":{\"visualType\":\"pivotTable\",\"projections\":{\"Rows\":[{\"queryRef\":\"Kusto Query Result.Dia_Nombre\",\"active\":true}],\"Columns\":[{\"queryRef\":\"Kusto Query Result.Hora_Num\",\"active\":true}],\"Values\":[{\"queryRef\":\"Sum(Kusto Query Result.Temp_Valor)\"}]},\"prototypeQuery\":{\"Version\":2,\"From\":[{\"Name\":\"k\",\"Entity\":\"Kusto Query Result\",\"Type\":0}],\"Select\":[{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"k\"}},\"Property\":\"Dia_Nombre\"},\"Name\":\"Kusto Query Result.Dia_Nombre\",\"NativeReferenceName\":\"Dia_Nombre\"},{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"k\"}},\"Property\":\"Hora_Num\"},\"Name\":\"Kusto Query Result.Hora_Num\",\"NativeReferenceName\":\"Hora_Num\"},{\"Aggregation\":{\"Expression\":{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"k\"}},\"Property\":\"Temp_Valor\"}},\"Function\":0},\"Name\":\"Sum(Kusto Query Result.Temp_Valor)\",\"NativeReferenceName\":\"Suma de Temp_Valor\"}]},\"drillFilterOtherVisuals\":true,\"objects\":{\"values\":[{\"properties\":{\"backColor\":{\"solid\":{\"color\":{\"expr\":{\"FillRule\":{\"Input\":{\"Aggregation\":{\"Expression\":{\"Column\":{\"Expression\":{\"SourceRef\":{\"Entity\":\"Kusto Query Result\"}},\"Property\":\"Temp_Valor\"}},\"Function\":0}},\"FillRule\":{\"linearGradient2\":{\"min\":{\"color\":{\"Literal\":{\"Value\":\"'#a0d1ff'\"}}},\"max\":{\"color\":{\"Literal\":{\"Value\":\"'#de6a73'\"}}},\"nullColoringStrategy\":{\"strategy\":{\"Literal\":{\"Value\":\"'asZero'\"}}}}}}}}}}},\"selector\":{\"data\":[{\"dataViewWildcard\":{\"matchingOption\":1}}],\"metadata\":\"Sum(Kusto Query Result.Temp_Valor)\"}}]}}}",
+          "filters": "[]",
+          "height": 189.53,
+          "width": 517.48,
+          "x": 762.93,
+          "y": 530.44,
+          "z": 2.00
+        }
+      ],
+      "width": 1280.00
+    }
+  ]
+}

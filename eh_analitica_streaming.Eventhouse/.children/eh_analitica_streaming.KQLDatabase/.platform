@@ -1,0 +1,12 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "KQLDatabase",
+    "displayName": "eh_analitica_streaming",
+    "description": "eh_analitica_streaming"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "e1d8a1cc-ac9d-adee-47a1-9c081ef74b1a"
+  }
+}

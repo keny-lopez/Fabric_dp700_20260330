@@ -1,0 +1,173 @@
+table 'Kusto Query Result'
+	lineageTag: e4ea52c5-b6a6-4853-bd5d-0f846446442c
+
+	column dt_objeto
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 09b8bbdd-fe27-4840-a001-04d55f9aca9e
+		summarizeBy: none
+		sourceColumn: dt_objeto
+
+		annotation SummarizationSetBy = Automatic
+
+	column Fecha
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: a2d1b60d-1d31-4c08-aac5-6556c526bc21
+		summarizeBy: none
+		sourceColumn: Fecha
+
+		annotation SummarizationSetBy = Automatic
+
+	column Anio
+		dataType: int64
+		formatString: 0
+		lineageTag: f3dafce4-be2c-43e1-828a-58cea64020c1
+		summarizeBy: sum
+		sourceColumn: Anio
+
+		annotation SummarizationSetBy = Automatic
+
+	column Mes_Num
+		dataType: int64
+		formatString: 0
+		lineageTag: d4e051db-6d0b-4e07-a77e-3da24ef9a6e5
+		summarizeBy: sum
+		sourceColumn: Mes_Num
+
+		annotation SummarizationSetBy = Automatic
+
+	column Mes_Nombre
+		dataType: string
+		lineageTag: bf00980b-4ebb-45ed-93fd-438e83c36866
+		summarizeBy: none
+		sourceColumn: Mes_Nombre
+
+		annotation SummarizationSetBy = Automatic
+
+	column Dia_Nombre
+		dataType: string
+		lineageTag: fed6d573-6beb-4d7c-b610-e9781546bc3f
+		summarizeBy: none
+		sourceColumn: Dia_Nombre
+
+		annotation SummarizationSetBy = Automatic
+
+	column Hora_Num
+		dataType: int64
+		formatString: 0
+		lineageTag: 11ac31a8-e27b-449e-ac3b-8a5d3d70b5f4
+		summarizeBy: sum
+		sourceColumn: Hora_Num
+
+		annotation SummarizationSetBy = Automatic
+
+	column Es_Fin_Semana
+		dataType: string
+		lineageTag: f462ddd7-cd9d-478d-a1e1-248ecfa524ed
+		summarizeBy: none
+		sourceColumn: Es_Fin_Semana
+
+		annotation SummarizationSetBy = Automatic
+
+	column Estacion
+		dataType: string
+		lineageTag: 5b1f5484-c32d-42cd-8671-e5e37f7a0e7a
+		summarizeBy: none
+		sourceColumn: Estacion
+
+		annotation SummarizationSetBy = Automatic
+
+	column Temp_Valor
+		dataType: double
+		lineageTag: 43081eb7-8ffd-47ae-9457-1cec64a97e3b
+		summarizeBy: sum
+		sourceColumn: Temp_Valor
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Temp_Unidad
+		dataType: string
+		lineageTag: 7a11cb91-1837-43b0-a8d0-2b66990bbd0e
+		summarizeBy: none
+		sourceColumn: Temp_Unidad
+
+		annotation SummarizationSetBy = Automatic
+
+	column Alerta_Calor
+		dataType: string
+		lineageTag: 1d833a59-3a38-494e-af0a-e0454b128160
+		summarizeBy: none
+		sourceColumn: Alerta_Calor
+
+		annotation SummarizationSetBy = Automatic
+
+	column Latitud
+		dataType: double
+		lineageTag: 5a4b2d91-b565-42ce-9a3c-f85323f34248
+		summarizeBy: sum
+		sourceColumn: Latitud
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Longitud
+		dataType: double
+		lineageTag: a33db665-5e11-48d9-bf1b-e6f787821a46
+		summarizeBy: sum
+		sourceColumn: Longitud
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition 'Kusto Query Result' = m
+		mode: directQuery
+		source = ```
+				let
+				Source = AzureDataExplorer.Contents("https://trd-s0y13jdgt5x110k4we.z6.kusto.fabric.microsoft.com", "1ef74b1a-9c08-47a1-adee-ac9de1d8a1cc", "hot_meteorologia
+				| extend 
+				    // 1. Tipado de Datos Críticos (Casting)
+				    dt_objeto = todatetime(dateTime),
+				    Temp_Valor = todouble(temperature.value),
+				    Temp_Unidad = tostring(temperature.unitLabel),
+				    Latitud = todouble(location.latitude),
+				    Longitud = todouble(location.longitude),
+				    Estacion = tostring(location.stationName)
+				| extend 
+				    // 2. Jerarquía Temporal para Power BI (Dimensiones de Tiempo)
+				    Fecha = startofday(dt_objeto),
+				    Anio = datetime_part(""year"", dt_objeto),
+				    Mes_Num = datetime_part(""month"", dt_objeto),
+				    Mes_Nombre = format_datetime(dt_objeto, 'MMMM'),
+				    Dia_Nombre = format_datetime(dt_objeto, 'dddd'),
+				    Hora_Num = datetime_part(""hour"", dt_objeto),
+				    Es_Fin_Semana = iif(dayofweek(dt_objeto) >= 6d, ""SÍ"", ""NO"")
+				| extend 
+				    // 3. Lógica de Negocio (KPIs Visuales)
+				    Alerta_Calor = iif(Temp_Valor > 30, ""Crítico"", ""Normal"")
+				| project 
+				    dt_objeto, 
+				    Fecha, 
+				    Anio, 
+				    Mes_Num, 
+				    Mes_Nombre, 
+				    Dia_Nombre, 
+				    Hora_Num, 
+				    Es_Fin_Semana, 
+				    Estacion, 
+				    Temp_Valor, 
+				    Temp_Unidad, 
+				    Alerta_Calor, 
+				    Latitud, 
+				    Longitud
+				| sort by dt_objeto desc", [])
+				in
+				Source
+				```
+
+	annotation PBI_ResultType = Table
+

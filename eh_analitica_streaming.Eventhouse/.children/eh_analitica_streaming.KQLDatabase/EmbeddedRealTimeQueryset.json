@@ -1,0 +1,28 @@
+{
+  "queryset": {
+    "version": "1.0.0",
+    "dataSources": [
+      {
+        "id": "81bd94fa-cb37-48d8-8949-389da1c2f109",
+        "clusterUri": "https://trd-s0y13jdgt5x110k4we.z6.kusto.fabric.microsoft.com",
+        "type": "Fabric",
+        "databaseItemId": "1ef74b1a-9c08-47a1-adee-ac9de1d8a1cc",
+        "databaseItemName": "eh_analitica_streaming"
+      }
+    ],
+    "tabs": [
+      {
+        "id": "ef29ca24-ca4d-4d77-b1a9-43453172abdc",
+        "content": "//***********************************************************************************************************\n// Here are two articles to help you get started with KQL:\n// KQL reference guide - https://aka.ms/KQLguide\n// SQL - KQL conversions - https://aka.ms/sqlcheatsheet\n//***********************************************************************************************************\n\n// Use \"take\" to view a sample number of records in the table and check the data.\nYOUR_TABLE_HERE\n| take 100\n\n// See how many records are in the table.\nYOUR_TABLE_HERE\n| count\n\n// This query returns the number of ingestions per hour in the given table.\nYOUR_TABLE_HERE\n| summarize IngestionCount = count() by bin(ingestion_time(), 1h)\n\n",
+        "title": "Tab",
+        "dataSourceId": "81bd94fa-cb37-48d8-8949-389da1c2f109"
+      },
+      {
+        "id": "aa87c4e0-2420-461a-84ba-70f3ab56b158",
+        "content": "hot_meteorologia\n| extend \n    dt_real = todatetime(dateTime)\n| evaluate bag_unpack(temperature) \n| extend \n    Fecha = format_datetime(dt_real, 'yyyy-MM-dd'),\n    Hora = format_datetime(dt_real, 'HH:mm:ss')\n| project Fecha, Hora, Temperatura = value, Unidad = units // Cambiado de 'unit' a 'units'\n\nhot_meteorologia\n| take 5\n| evaluate bag_unpack(temperature)\n\nhot_meteorologia\n| take 10\n| project-reorder dateTime, temperature, * // Ponemos las importantes al principio\n| getschema\n\n#------ Consulta definitiva referente a mis datos y prompts.\n\nhot_meteorologia\n| extend \n    // 1. Estandarización de tiempo\n    dt_objeto = todatetime(dateTime),\n    // 2. Desglose de Temperature (JSON)\n    Temp_Valor = todouble(temperature.value),\n    Temp_Unidad = tostring(temperature.unitLabel),\n    // 3. Desglose de Location (JSON)\n    Latitud = todouble(location.latitude),\n    Longitud = todouble(location.longitude),\n    Estacion = tostring(location.stationName)\n| extend \n    // 4. Agregamos inteligencia: Clasificación de temperatura\n    Nivel_Termico = case(\n        Temp_Valor < 15, \"Frío ❄️\",\n        Temp_Valor between (15 .. 28), \"Templado ☁️\",\n        \"Calor ☀️\"\n    ),\n    // 5. Formateo de tiempos para análisis temporal\n    Fecha = format_datetime(dt_objeto, 'yyyy-MM-dd'),\n    Hora = format_datetime(dt_objeto, 'HH:mm:ss'),\n    Dia_Semana = dayofweek(dt_objeto)\n| project Fecha, Hora, Estacion, Temp_Valor, Temp_Unidad, Nivel_Termico, Latitud, Longitud\n| sort by Fecha desc, Hora desc\n\n\n#-----------\nhot_meteorologia\n| extend \n    dt_objeto = todatetime(dateTime),\n    Temp_Valor = todouble(temperature.value),\n    Lat = todouble(location.latitude),\n    Lon = todouble(location.longitude)\n| extend \n    Fecha = format_datetime(dt_objeto, 'yyyy-MM-dd')\n| summarize \n    Temp_Maxima = max(Temp_Valor), \n    Temp_Minima = min(Temp_Valor) \n    by Fecha, Lat, Lon\n| sort by Fecha desc\n\nhot_meteorologia\n| extend \n    dt_objeto = todatetime(dateTime),\n    Temp_Valor = todouble(temperature.value),\n    Lat = todouble(location.latitude),\n    Lon = todouble(location.longitude)\n| extend \n    Fecha = format_datetime(dt_objeto, 'yyyy-MM-dd'),\n    Hora = format_datetime(dt_objeto, 'HH:mm:ss')\n| summarize \n    Temp_Maxima = max(Temp_Valor), \n    Temp_Minima = min(Temp_Valor) \n    by Fecha, Hora, Lat, Lon\n| sort by Fecha desc, Hora desc\n\n#-------------- Consulta definitiva para quemar la tabla en Power BI Service:\n\nhot_meteorologia\n| extend \n    // 1. Tipado de Datos Críticos (Casting)\n    dt_objeto = todatetime(dateTime),\n    Temp_Valor = todouble(temperature.value),\n    Temp_Unidad = tostring(temperature.unitLabel),\n    Latitud = todouble(location.latitude),\n    Longitud = todouble(location.longitude),\n    Estacion = tostring(location.stationName)\n| extend \n    // 2. Jerarquía Temporal para Power BI (Dimensiones de Tiempo)\n    Fecha = startofday(dt_objeto),\n    Anio = datetime_part(\"year\", dt_objeto),\n    Mes_Num = datetime_part(\"month\", dt_objeto),\n    Mes_Nombre = format_datetime(dt_objeto, 'MMMM'),\n    Dia_Nombre = format_datetime(dt_objeto, 'dddd'),\n    Hora_Num = datetime_part(\"hour\", dt_objeto),\n    Es_Fin_Semana = iif(dayofweek(dt_objeto) >= 6d, \"SÍ\", \"NO\")\n| extend \n    // 3. Lógica de Negocio (KPIs Visuales)\n    Alerta_Calor = iif(Temp_Valor > 30, \"Crítico\", \"Normal\")\n| project \n    dt_objeto, \n    Fecha, \n    Anio, \n    Mes_Num, \n    Mes_Nombre, \n    Dia_Nombre, \n    Hora_Num, \n    Es_Fin_Semana, \n    Estacion, \n    Temp_Valor, \n    Temp_Unidad, \n    Alerta_Calor, \n    Latitud, \n    Longitud\n| sort by dt_objeto desc",
+        "title": "",
+        "dataSourceId": "81bd94fa-cb37-48d8-8949-389da1c2f109"
+      }
+    ]
+  }
+}

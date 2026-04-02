@@ -1,0 +1,12 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Eventhouse",
+    "displayName": "eh_analitica_streaming",
+    "description": "eh_analitica_streaming"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "a694b03b-a059-a62a-4485-30b6b161c1f9"
+  }
+}
