@@ -68,9 +68,10 @@ shared dim_cliente_tcredito = let
   Navegación = Origen{[workspaceId = "f2f1a2a4-28bd-4388-aea2-989b8d2479ff"]}[Data],
   #"Navegación 1" = Navegación{[lakehouseId = "f2f5ef99-fa5e-4802-b052-60d3674c2af2"]}[Data],
   #"Navegación 2" = #"Navegación 1"{[Id = "sales_personcreditcard", ItemKind = "Table"]}[Data],
-  #"Columnas quitadas" = Table.RemoveColumns(#"Navegación 2", {"modifieddate"})
+  #"Columnas quitadas" = Table.RemoveColumns(#"Navegación 2", {"modifieddate"}),
+  #"Duplicados quitados" = Table.Distinct(#"Columnas quitadas", {"businessentityid"})
 in
-  #"Columnas quitadas";
+  #"Duplicados quitados";
 shared sales_customer = let
   Origen = Lakehouse.Contents(null),
   Navegación = Origen{[workspaceId = "f2f1a2a4-28bd-4388-aea2-989b8d2479ff"]}[Data],
