@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Eventstream",
+    "displayName": "new_event_stream"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "999fd9ec-c66e-abd8-4942-70f8accac9c2"
+  }
+}

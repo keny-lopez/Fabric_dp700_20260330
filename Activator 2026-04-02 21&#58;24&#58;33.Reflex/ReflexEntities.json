@@ -1,0 +1,38 @@
+[
+  {
+    "uniqueIdentifier": "21d39f2d-a963-4bbf-9bb6-4e5414d73b24",
+    "payload": {
+      "name": "EventStream",
+      "metadata": {
+        "eventstreamArtifactId": "accac9c2-70f8-4942-abd8-c66e999fd9ec"
+      }
+    },
+    "type": "eventstreamSource-v1"
+  },
+  {
+    "uniqueIdentifier": "176b8eb2-5586-4417-aba5-f74c7dabb32d",
+    "payload": {
+      "name": "new_event_stream-stream event",
+      "definition": {
+        "type": "Event",
+        "instance": "{\"templateId\":\"SourceEvent\",\"templateVersion\":\"1.1\",\"steps\":[{\"name\":\"SourceEventStep\",\"id\":\"a43e109e-ec2a-481e-8435-690223bc277d\",\"rows\":[{\"name\":\"SourceSelector\",\"kind\":\"SourceReference\",\"arguments\":[{\"name\":\"entityId\",\"type\":\"string\",\"value\":\"21d39f2d-a963-4bbf-9bb6-4e5414d73b24\"}]}]}]}"
+      }
+    },
+    "type": "timeSeriesView-v1"
+  },
+  {
+    "uniqueIdentifier": "070a9c12-2680-481d-a71f-d752da507225",
+    "payload": {
+      "name": "Alerta new_event_stream-stream event",
+      "definition": {
+        "type": "Rule",
+        "instance": "{\"steps\":[{\"id\":\"6fe9918b-0909-4e4f-9624-4eb24e444059\",\"name\":\"FieldsDefaultsStep\",\"rows\":[{\"arguments\":[{\"arguments\":[{\"name\":\"entityId\",\"type\":\"string\",\"value\":\"176b8eb2-5586-4417-aba5-f74c7dabb32d\"}],\"kind\":\"EventReference\",\"name\":\"event\",\"type\":\"complex\"}],\"kind\":\"Event\",\"name\":\"EventSelector\"},{\"arguments\":[{\"name\":\"fieldName\",\"type\":\"string\",\"value\":\"temperature.value\"},{\"name\":\"default\",\"type\":\"number\",\"value\":0},{\"name\":\"defaultType\",\"type\":\"string\",\"value\":\"Number\"}],\"kind\":\"EventFieldWithDefault\",\"name\":\"EventFieldWithDefaultSelector\"},{\"arguments\":[{\"name\":\"fieldName\",\"type\":\"string\",\"value\":\"wind.speed.value\"},{\"name\":\"default\",\"type\":\"number\",\"value\":0},{\"name\":\"defaultType\",\"type\":\"string\",\"value\":\"Number\"}],\"kind\":\"EventFieldWithDefault\",\"name\":\"EventFieldWithDefaultSelector\"},{\"arguments\":[{\"name\":\"fieldName\",\"type\":\"string\",\"value\":\"relativeHumidity\"},{\"name\":\"default\",\"type\":\"number\",\"value\":0},{\"name\":\"defaultType\",\"type\":\"string\",\"value\":\"Number\"}],\"kind\":\"EventFieldWithDefault\",\"name\":\"EventFieldWithDefaultSelector\"}]},{\"id\":\"0c86e626-f097-4927-aaba-4f1b9bc30fb0\",\"name\":\"EventDetectStep\",\"rows\":[{\"arguments\":[{\"name\":\"fieldName\",\"type\":\"string\",\"value\":\"temperature.value\"}],\"kind\":\"EventField\",\"name\":\"EventFieldSelector\"},{\"arguments\":[{\"name\":\"op\",\"type\":\"string\",\"value\":\"IsEqualTo\"},{\"name\":\"threshold\",\"type\":\"number\",\"value\":29}],\"kind\":\"NumberValueCondition\",\"name\":\"NumberValueCondition\"}]},{\"id\":\"c2b54518-5629-48cd-bae0-dc068dec8854\",\"name\":\"EventDetectStep\",\"rows\":[{\"arguments\":[{\"name\":\"fieldName\",\"type\":\"string\",\"value\":\"wind.speed.value\"}],\"kind\":\"EventField\",\"name\":\"EventFieldSelector\"},{\"arguments\":[{\"name\":\"op\",\"type\":\"string\",\"value\":\"IsGreaterThanOrEqualTo\"},{\"name\":\"threshold\",\"type\":\"number\",\"value\":30}],\"kind\":\"NumberValueCondition\",\"name\":\"NumberValueCondition\"}]},{\"id\":\"07042221-530e-4bb4-8d1a-11a637b2563a\",\"name\":\"EventDetectStep\",\"rows\":[{\"arguments\":[{\"name\":\"fieldName\",\"type\":\"string\",\"value\":\"relativeHumidity\"}],\"kind\":\"EventField\",\"name\":\"EventFieldSelector\"},{\"arguments\":[{\"name\":\"op\",\"type\":\"string\",\"value\":\"IsLessThanOrEqualTo\"},{\"name\":\"threshold\",\"type\":\"number\",\"value\":30}],\"kind\":\"NumberValueCondition\",\"name\":\"NumberValueCondition\"}]},{\"id\":\"2c8fa5a5-75c3-4d28-8f77-86626d91b350\",\"name\":\"ActStep\",\"rows\":[{\"arguments\":[{\"name\":\"messageLocale\",\"type\":\"string\",\"value\":\"en-us\"},{\"name\":\"sentTo\",\"type\":\"array\",\"values\":[{\"type\":\"string\",\"value\":\"keny.lopez@kenyvel.onmicrosoft.com\"}]},{\"name\":\"copyTo\",\"type\":\"array\",\"values\":[]},{\"name\":\"bCCTo\",\"type\":\"array\",\"values\":[]},{\"name\":\"subject\",\"type\":\"array\",\"values\":[{\"type\":\"string\",\"value\":\"Alerta de Activator Alerta new_event_stream-stream event\"}]},{\"name\":\"headline\",\"type\":\"array\",\"values\":[{\"name\":\"string\",\"type\":\"string\",\"value\":\"Alerta Condición IIFF\"}]},{\"name\":\"optionalMessage\",\"type\":\"array\",\"values\":[{\"name\":\"string\",\"type\":\"string\",\"value\":\"Las condiciones son las adecuadas para generar IIFF.\"}]},{\"name\":\"additionalInformation\",\"type\":\"array\",\"values\":[]}],\"kind\":\"EmailMessage\",\"name\":\"EmailBinding\"}]}],\"templateId\":\"EventTrigger\",\"templateVersion\":\"1.2.4\"}",
+        "settings": {
+          "shouldRun": false,
+          "shouldApplyRuleOnUpdate": true
+        }
+      }
+    },
+    "type": "timeSeriesView-v1"
+  }
+]
