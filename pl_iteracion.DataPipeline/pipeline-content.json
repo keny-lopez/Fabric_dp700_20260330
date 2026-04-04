@@ -1,5 +1,100 @@
 {
   "properties": {
-    "activities": []
+    "activities": [
+      {
+        "type": "ForEach",
+        "typeProperties": {
+          "isSequential": true,
+          "items": {
+            "value": "@pipeline().parameters.anio",
+            "type": "Expression"
+          },
+          "activities": [
+            {
+              "type": "Copy",
+              "typeProperties": {
+                "source": {
+                  "type": "BinarySource",
+                  "formatSettings": {
+                    "type": "BinaryReadSettings"
+                  },
+                  "storeSettings": {
+                    "type": "HttpReadSettings",
+                    "requestMethod": "GET"
+                  },
+                  "datasetSettings": {
+                    "type": "Binary",
+                    "typeProperties": {
+                      "location": {
+                        "type": "HttpServerLocation",
+                        "relativeUrl": {
+                          "value": "@concat(\n    pipeline().parameters.BaseURL,\n    item(),\n    '/',\n    item(),\n    '_viento_dmc.csv'\n)",
+                          "type": "Expression"
+                        }
+                      }
+                    },
+                    "externalReferences": {
+                      "connection": "ef09147a-1335-4b6d-aa5f-09a64773333f"
+                    },
+                    "annotations": []
+                  }
+                },
+                "sink": {
+                  "type": "BinarySink",
+                  "storeSettings": {
+                    "type": "LakehouseWriteSettings"
+                  },
+                  "datasetSettings": {
+                    "type": "Binary",
+                    "typeProperties": {
+                      "location": {
+                        "type": "LakehouseLocation",
+                        "folderPath": "MinCiencia"
+                      }
+                    },
+                    "connectionSettings": {
+                      "name": "Bronze_Landing",
+                      "properties": {
+                        "type": "Lakehouse",
+                        "typeProperties": {
+                          "artifactId": "674c2af2-60d3-b052-4802-fa5ef2f5ef99",
+                          "workspaceId": "00000000-0000-0000-0000-000000000000",
+                          "rootFolder": "Files"
+                        },
+                        "externalReferences": {
+                          "connection": "e209fdc5-c2c9-404e-a08e-f6e5600ef0a2"
+                        },
+                        "annotations": []
+                      }
+                    },
+                    "annotations": []
+                  }
+                },
+                "enableStaging": false
+              },
+              "policy": {
+                "timeout": "0.12:00:00",
+                "retry": 0,
+                "retryIntervalInSeconds": 30,
+                "secureInput": false,
+                "secureOutput": false
+              },
+              "name": "datos temperatura",
+              "dependsOn": []
+            }
+          ]
+        },
+        "name": "Iteracion anios temperatura",
+        "dependsOn": []
+      }
+    ],
+    "parameters": {
+      "anio": {
+        "type": "array"
+      },
+      "BaseURL": {
+        "type": "string"
+      }
+    }
   }
 }
