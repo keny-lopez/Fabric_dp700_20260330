@@ -1,5 +1,538 @@
 {
   "properties": {
-    "activities": []
+    "activities": [
+      {
+        "type": "Copy",
+        "typeProperties": {
+          "source": {
+            "type": "AzurePostgreSqlSource",
+            "partitionOption": "None",
+            "queryTimeout": "02:00:00",
+            "datasetSettings": {
+              "type": "AzurePostgreSqlTable",
+              "typeProperties": {
+                "table": "contacttype",
+                "schema": "person"
+              },
+              "version": "2.0",
+              "schema": [],
+              "externalReferences": {
+                "connection": "e12bf233-fd24-436e-bf61-d32b59d1c7b9"
+              },
+              "annotations": []
+            }
+          },
+          "sink": {
+            "type": "LakehouseTableSink",
+            "tableActionOption": "Append",
+            "applyVOrder": false,
+            "partitionOption": "None",
+            "datasetSettings": {
+              "type": "LakehouseTable",
+              "typeProperties": {
+                "table": "person_contacttype"
+              },
+              "schema": [],
+              "connectionSettings": {
+                "name": "Bronze_Landing",
+                "properties": {
+                  "type": "Lakehouse",
+                  "typeProperties": {
+                    "artifactId": "674c2af2-60d3-b052-4802-fa5ef2f5ef99",
+                    "workspaceId": "00000000-0000-0000-0000-000000000000",
+                    "rootFolder": "Tables"
+                  },
+                  "externalReferences": {
+                    "connection": "e209fdc5-c2c9-404e-a08e-f6e5600ef0a2"
+                  },
+                  "annotations": []
+                }
+              },
+              "annotations": []
+            }
+          },
+          "translator": {
+            "type": "TabularTranslator",
+            "mappings": [
+              {
+                "source": {
+                  "name": "contacttypeid",
+                  "type": "Int32",
+                  "physicalType": "integer"
+                },
+                "sink": {
+                  "name": "contacttypeid",
+                  "physicalType": "integer"
+                }
+              },
+              {
+                "source": {
+                  "name": "name",
+                  "type": "String",
+                  "physicalType": "character varying"
+                },
+                "sink": {
+                  "name": "name",
+                  "physicalType": "string"
+                }
+              },
+              {
+                "source": {
+                  "name": "modifieddate",
+                  "type": "DateTime",
+                  "physicalType": "timestamp without time zone"
+                },
+                "sink": {
+                  "name": "modifieddate",
+                  "physicalType": "timestamp"
+                }
+              }
+            ],
+            "typeConversion": true,
+            "typeConversionSettings": {
+              "allowDataTruncation": true,
+              "treatBooleanAsNumber": false
+            }
+          },
+          "enableStaging": false
+        },
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "contacttype",
+        "dependsOn": []
+      },
+      {
+        "type": "Copy",
+        "typeProperties": {
+          "source": {
+            "type": "AzurePostgreSqlSource",
+            "partitionOption": "None",
+            "queryTimeout": "02:00:00",
+            "datasetSettings": {
+              "type": "AzurePostgreSqlTable",
+              "typeProperties": {
+                "table": "countryregion",
+                "schema": "person"
+              },
+              "version": "2.0",
+              "schema": [],
+              "externalReferences": {
+                "connection": "e12bf233-fd24-436e-bf61-d32b59d1c7b9"
+              },
+              "annotations": []
+            }
+          },
+          "sink": {
+            "type": "LakehouseTableSink",
+            "tableActionOption": "Append",
+            "applyVOrder": false,
+            "partitionOption": "None",
+            "datasetSettings": {
+              "type": "LakehouseTable",
+              "typeProperties": {
+                "table": "person_countryregion"
+              },
+              "schema": [],
+              "connectionSettings": {
+                "name": "Bronze_Landing",
+                "properties": {
+                  "type": "Lakehouse",
+                  "typeProperties": {
+                    "artifactId": "674c2af2-60d3-b052-4802-fa5ef2f5ef99",
+                    "workspaceId": "00000000-0000-0000-0000-000000000000",
+                    "rootFolder": "Tables"
+                  },
+                  "externalReferences": {
+                    "connection": "e209fdc5-c2c9-404e-a08e-f6e5600ef0a2"
+                  },
+                  "annotations": []
+                }
+              },
+              "annotations": []
+            }
+          },
+          "translator": {
+            "type": "TabularTranslator",
+            "mappings": [
+              {
+                "source": {
+                  "name": "countryregioncode",
+                  "type": "String",
+                  "physicalType": "character varying"
+                },
+                "sink": {
+                  "name": "countryregioncode",
+                  "physicalType": "string"
+                }
+              },
+              {
+                "source": {
+                  "name": "name",
+                  "type": "String",
+                  "physicalType": "character varying"
+                },
+                "sink": {
+                  "name": "name",
+                  "physicalType": "string"
+                }
+              },
+              {
+                "source": {
+                  "name": "modifieddate",
+                  "type": "DateTime",
+                  "physicalType": "timestamp without time zone"
+                },
+                "sink": {
+                  "name": "modifieddate",
+                  "physicalType": "timestamp"
+                }
+              }
+            ],
+            "typeConversion": true,
+            "typeConversionSettings": {
+              "allowDataTruncation": true,
+              "treatBooleanAsNumber": false
+            }
+          },
+          "enableStaging": false
+        },
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "countryregion",
+        "dependsOn": [
+          {
+            "activity": "contacttype",
+            "dependencyConditions": [
+              "Completed"
+            ]
+          }
+        ]
+      },
+      {
+        "type": "Copy",
+        "typeProperties": {
+          "source": {
+            "type": "AzurePostgreSqlSource",
+            "partitionOption": "None",
+            "queryTimeout": "02:00:00",
+            "datasetSettings": {
+              "type": "AzurePostgreSqlTable",
+              "typeProperties": {
+                "table": "phonenumbertype",
+                "schema": "person"
+              },
+              "version": "2.0",
+              "schema": [],
+              "externalReferences": {
+                "connection": "e12bf233-fd24-436e-bf61-d32b59d1c7b9"
+              },
+              "annotations": []
+            }
+          },
+          "sink": {
+            "type": "LakehouseTableSink",
+            "tableActionOption": "Append",
+            "applyVOrder": false,
+            "partitionOption": "None",
+            "datasetSettings": {
+              "type": "LakehouseTable",
+              "typeProperties": {
+                "table": "person_phonenumbertype"
+              },
+              "schema": [],
+              "connectionSettings": {
+                "name": "Bronze_Landing",
+                "properties": {
+                  "type": "Lakehouse",
+                  "typeProperties": {
+                    "artifactId": "674c2af2-60d3-b052-4802-fa5ef2f5ef99",
+                    "workspaceId": "00000000-0000-0000-0000-000000000000",
+                    "rootFolder": "Tables"
+                  },
+                  "externalReferences": {
+                    "connection": "e209fdc5-c2c9-404e-a08e-f6e5600ef0a2"
+                  },
+                  "annotations": []
+                }
+              },
+              "annotations": []
+            }
+          },
+          "translator": {
+            "type": "TabularTranslator",
+            "mappings": [
+              {
+                "source": {
+                  "name": "phonenumbertypeid",
+                  "type": "Int32",
+                  "physicalType": "integer"
+                },
+                "sink": {
+                  "name": "phonenumbertypeid",
+                  "physicalType": "integer"
+                }
+              },
+              {
+                "source": {
+                  "name": "name",
+                  "type": "String",
+                  "physicalType": "character varying"
+                },
+                "sink": {
+                  "name": "name",
+                  "physicalType": "string"
+                }
+              },
+              {
+                "source": {
+                  "name": "modifieddate",
+                  "type": "DateTime",
+                  "physicalType": "timestamp without time zone"
+                },
+                "sink": {
+                  "name": "modifieddate",
+                  "physicalType": "timestamp"
+                }
+              }
+            ],
+            "typeConversion": true,
+            "typeConversionSettings": {
+              "allowDataTruncation": true,
+              "treatBooleanAsNumber": false
+            }
+          },
+          "enableStaging": false
+        },
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "phonenumbertype",
+        "dependsOn": [
+          {
+            "activity": "personphone",
+            "dependencyConditions": [
+              "Completed"
+            ]
+          }
+        ]
+      },
+      {
+        "type": "Copy",
+        "typeProperties": {
+          "source": {
+            "type": "AzurePostgreSqlSource",
+            "partitionOption": "None",
+            "queryTimeout": "02:00:00",
+            "datasetSettings": {
+              "type": "AzurePostgreSqlTable",
+              "typeProperties": {
+                "table": "personphone",
+                "schema": "person"
+              },
+              "version": "2.0",
+              "schema": [],
+              "externalReferences": {
+                "connection": "e12bf233-fd24-436e-bf61-d32b59d1c7b9"
+              },
+              "annotations": []
+            }
+          },
+          "sink": {
+            "type": "LakehouseTableSink",
+            "tableActionOption": "Append",
+            "applyVOrder": false,
+            "partitionOption": "None",
+            "datasetSettings": {
+              "type": "LakehouseTable",
+              "typeProperties": {
+                "table": "person_personphone"
+              },
+              "schema": [],
+              "connectionSettings": {
+                "name": "Bronze_Landing",
+                "properties": {
+                  "type": "Lakehouse",
+                  "typeProperties": {
+                    "artifactId": "674c2af2-60d3-b052-4802-fa5ef2f5ef99",
+                    "workspaceId": "00000000-0000-0000-0000-000000000000",
+                    "rootFolder": "Tables"
+                  },
+                  "externalReferences": {
+                    "connection": "e209fdc5-c2c9-404e-a08e-f6e5600ef0a2"
+                  },
+                  "annotations": []
+                }
+              },
+              "annotations": []
+            }
+          },
+          "translator": {
+            "type": "TabularTranslator",
+            "mappings": [
+              {
+                "source": {
+                  "name": "businessentityid",
+                  "type": "Int32",
+                  "physicalType": "integer"
+                },
+                "sink": {
+                  "name": "businessentityid",
+                  "physicalType": "integer"
+                }
+              },
+              {
+                "source": {
+                  "name": "phonenumber",
+                  "type": "String",
+                  "physicalType": "character varying"
+                },
+                "sink": {
+                  "name": "phonenumber",
+                  "physicalType": "string"
+                }
+              },
+              {
+                "source": {
+                  "name": "phonenumbertypeid",
+                  "type": "Int32",
+                  "physicalType": "integer"
+                },
+                "sink": {
+                  "name": "phonenumbertypeid",
+                  "physicalType": "integer"
+                }
+              },
+              {
+                "source": {
+                  "name": "modifieddate",
+                  "type": "DateTime",
+                  "physicalType": "timestamp without time zone"
+                },
+                "sink": {
+                  "name": "modifieddate",
+                  "physicalType": "timestamp"
+                }
+              }
+            ],
+            "typeConversion": true,
+            "typeConversionSettings": {
+              "allowDataTruncation": true,
+              "treatBooleanAsNumber": false
+            }
+          },
+          "enableStaging": false
+        },
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "personphone",
+        "dependsOn": [
+          {
+            "activity": "countryregion",
+            "dependencyConditions": [
+              "Completed"
+            ]
+          }
+        ]
+      },
+      {
+        "type": "Fail",
+        "typeProperties": {
+          "message": {
+            "value": "@concat(\n    '❌ Error en Actividad: ', activity('contacttype').Name, \n    ' | Pipeline: ', pipeline().Pipeline,\n    ' | Mensaje: ', activity('contacttype').output.errors[0].message,\n    ' | Código: ', activity('contacttype').output.errors[0].errorCode,\n    ' | Fecha: ', utcnow()\n)",
+            "type": "Expression"
+          },
+          "errorCode": "ERR_INGEST_CONTACT"
+        },
+        "name": "Errores de ejecucion contacttype",
+        "description": "Descripción Técnica de la Actividad\nPropósito: Ingesta de datos de la entidad contacttype hacia la capa Bronze.\n\nLógica de Control de Errores:\nEsta actividad utiliza una expresión personalizada para la captura de logs en caso de fallo. Se ha realizado una refactorización del script original para mejorar la observabilidad del sistema.\n\nScript Original (Referencia Instructor):\n@concat('error copia contacttypr', activity('contacttype').output)\n\nNota: Se descarta por ser un volcado de JSON poco legible y propenso a saturación de logs.\n\nScript Actual (Estándar Pro):\n@concat('❌ Error en Actividad: ', activity('contacttype').Name, ' | Pipeline: ', pipeline().Pipeline, ' | Mensaje: ', activity('contacttype').output.errors[0].message, ' | Código: ', activity('contacttype').output.errors[0].errorCode, ' | Fecha: ', utcnow())\n\nMejoras Aplicadas:\n\nDinamismo: Se extrae el nombre de la actividad y del pipeline automáticamente para evitar errores manuales.\n\nPrecisión: Se accede directamente al primer mensaje de error del arreglo errors[] para obtener una descripción clara del fallo.\n\nAuditoría: Se incluye una marca de tiempo en formato UTC para facilitar la correlación con los logs de Fabric Capacity Metrics.",
+        "dependsOn": [
+          {
+            "activity": "contacttype",
+            "dependencyConditions": [
+              "Failed"
+            ]
+          }
+        ]
+      },
+      {
+        "type": "Fail",
+        "typeProperties": {
+          "message": {
+            "value": "@concat(\n    '❌ Error en Actividad: ', activity('countryregion').Name, \n    ' | Pipeline: ', pipeline().Pipeline,\n    ' | Mensaje: ', activity('countryregion').output.errors[0].message,\n    ' | Código: ', activity('countryregion').output.errors[0].errorCode,\n    ' | Fecha (UTC): ', utcnow()\n)",
+            "type": "Expression"
+          },
+          "errorCode": "ERR_INGEST_REGION"
+        },
+        "name": "Errores ejecucion countryregion",
+        "description": "Descripción Técnica de la Actividad:\n\nPropósito: Ingesta de la entidad countryregion hacia la capa Bronze_Landing.\n\nGestión de Excepciones: Se implementa captura de logs personalizada mediante el generador de expresiones.\n\nReferencia Original (Instructor): @concat('error countryregion ', activity('countryregion').output)\n\nOptimización Aplicada:\n\nIdentificación Dinámica: Se utilizan las funciones Name y Pipeline para que el mensaje sea resiliente a cambios de nombre en los objetos.\n\nFiltrado de Salida: Se accede específicamente a errors[0].message para evitar el truncamiento de cadenas y facilitar la lectura humana en el Monitoring Hub.\n\nEstampa de Tiempo: Se integra utcnow() para permitir la correlación precisa con métricas de capacidad y eventos de red.",
+        "dependsOn": [
+          {
+            "activity": "countryregion",
+            "dependencyConditions": [
+              "Failed"
+            ]
+          }
+        ]
+      },
+      {
+        "type": "Fail",
+        "typeProperties": {
+          "message": {
+            "value": "@concat(\n    '❌ Error en Actividad: ', activity('personphone').Name, \n    ' | Pipeline: ', pipeline().Pipeline,\n    ' | Mensaje: ', activity('personphone').output.errors[0].message,\n    ' | Código: ', activity('personphone').output.errors[0].errorCode,\n    ' | Fecha (UTC): ', utcnow()\n)",
+            "type": "Expression"
+          },
+          "errorCode": "ERR_INGEST_PERSONPHONE"
+        },
+        "name": "Errores ejecucion personphone",
+        "description": "Descripción Profesional (Pestaña General):\n\nPropósito: Captura de excepciones para la ingesta de la entidad personphone hacia la capa Bronze.\nRefactorización: Se separa de la lógica agrupada del instructor para garantizar la trazabilidad única y evitar errores de referencia nula en el objeto output.\nNomenclatura: Alineado con el estándar [CATEGORÍA]_[ENTIDAD] para facilitar el filtrado en el Monitoring Hub.",
+        "dependsOn": [
+          {
+            "activity": "personphone",
+            "dependencyConditions": [
+              "Failed"
+            ]
+          }
+        ]
+      },
+      {
+        "type": "Fail",
+        "typeProperties": {
+          "message": {
+            "value": "@concat(\n    '❌ Error en Actividad: ', activity('phonenumbertype').Name, \n    ' | Pipeline: ', pipeline().Pipeline,\n    ' | Mensaje: ', activity('phonenumbertype').output.errors[0].message,\n    ' | Código: ', activity('phonenumbertype').output.errors[0].errorCode,\n    ' | Fecha (UTC): ', utcnow()\n)",
+            "type": "Expression"
+          },
+          "errorCode": "ERR_INGEST_PHONETYPE"
+        },
+        "name": "Errores ejecucion phonenumbertype",
+        "description": "Descripción Profesional (Pestaña General):\n\nPropósito: Captura de excepciones para la ingesta de la entidad phonenumbertype.\nOptimización Técnica: Se utiliza el acceso directo a errors[0] para extraer el mensaje técnico real de la fuente, descartando el volcado completo de JSON que genera ruido en los logs.\nHigiene de Datos: Esta estructura permite una respuesta rápida ante incidentes sin necesidad de abrir el código del pipeline.",
+        "dependsOn": [
+          {
+            "activity": "phonenumbertype",
+            "dependencyConditions": [
+              "Failed"
+            ]
+          }
+        ]
+      }
+    ]
   }
 }
