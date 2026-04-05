@@ -42,7 +42,7 @@
                 "sink": {
                   "type": "BinarySink",
                   "storeSettings": {
-                    "type": "LakehouseWriteSettings"
+                    "type": "AzureBlobStorageWriteSettings"
                   },
                   "datasetSettings": {
                     "type": "Binary",
