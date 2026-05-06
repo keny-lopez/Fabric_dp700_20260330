@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Notebook",
+    "displayName": "Ingesta_Spark_Streaming"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "009d3cae-b2eb-ae06-407d-ead2027a0345"
+  }
+}
