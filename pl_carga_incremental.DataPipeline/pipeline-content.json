@@ -45,8 +45,8 @@
       {
         "type": "TridentNotebook",
         "typeProperties": {
-          "notebookId": "12ea3578-35e6-b6f0-42eb-bb0adfc9a19d",
-          "workspaceId": "00000000-0000-0000-0000-000000000000"
+          "notebookId": "dfc9a19d-bb0a-42eb-b6f0-35e612ea3578",
+          "workspaceId": "f2f1a2a4-28bd-4388-aea2-989b8d2479ff"
         },
         "policy": {
           "timeout": "0.12:00:00",
@@ -56,6 +56,8 @@
           "secureOutput": false
         },
         "name": "marca agua destino",
+        "state": "Inactive",
+        "onInactiveMarkAs": "Succeeded",
         "dependsOn": []
       }
     ]

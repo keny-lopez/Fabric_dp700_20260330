@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Notebook",
+    "displayName": "nb_carga_incremental"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "0897c959-cef4-b84b-4f06-a75cb5222afc"
+  }
+}

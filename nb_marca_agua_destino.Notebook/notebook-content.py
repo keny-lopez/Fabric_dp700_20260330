@@ -25,15 +25,56 @@
 
 # CELL ********************
 
-# MAGIC %%sql
-# MAGIC SELECT MAX(time) AS Fecha_Maxima
-# MAGIC FROM delta.`abfss://DP700@onelake.dfs.fabric.microsoft.com/Silver_Refined.Lakehouse/Tables/dbo/minciencia_incremental_pipeline`
+# Ajuste directo sobre tu script funcional
+df = spark.sql("""
+    SELECT MAX(time) AS Fecha_Maxima 
+    FROM delta.`abfss://DP700@onelake.dfs.fabric.microsoft.com/Silver_Refined.Lakehouse/Tables/dbo/minciencia_incremental_pipeline`
+""")
+
+display(df)
 
 # METADATA ********************
 
 # META {
-# META   "language": "sparksql",
+# META   "language": "python",
 # META   "language_group": "synapse_pyspark"
+# META }
+
+# CELL ********************
+
+# 1. Asegurar que el nombre de la tabla sea tratado correctamente
+nombre_tabla = "Bronze_Landing.marca_de_agua"
+
+# 2. Escritura con el estándar de Fabric
+# Usar format("delta") para asegurar la integridad de la tabla
+df.write \
+  .format("delta") \
+  .mode("overwrite") \
+  .option("mergeSchema", "true") \
+  .saveAsTable(nombre_tabla)
+
+print(f"Control de Calidad: Tabla {nombre_tabla} actualizada exitosamente.")
+
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# CELL ********************
+
+# %%sql
+# SELECT MAX(time) AS Fecha_Maxima
+# FROM delta.`abfss://DP700@onelake.dfs.fabric.microsoft.com/Silver_Refined.Lakehouse/Tables/dbo/minciencia_incremental_pipeline`
+
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark",
+# META   "frozen": true,
+# META   "editable": false
 # META }
 
 # CELL ********************
@@ -47,7 +88,9 @@
 
 # META {
 # META   "language": "python",
-# META   "language_group": "synapse_pyspark"
+# META   "language_group": "synapse_pyspark",
+# META   "frozen": true,
+# META   "editable": false
 # META }
 
 # CELL ********************
@@ -60,5 +103,7 @@
 
 # META {
 # META   "language": "python",
-# META   "language_group": "synapse_pyspark"
+# META   "language_group": "synapse_pyspark",
+# META   "frozen": true,
+# META   "editable": false
 # META }
