@@ -6,10 +6,9 @@ shared minciencia = let
   #"Navegación 1" = Origen{[workspaceId = "f2f1a2a4-28bd-4388-aea2-989b8d2479ff"]}[Data],
   #"Navegación 2" = #"Navegación 1"{[lakehouseId = "f2f5ef99-fa5e-4802-b052-60d3674c2af2"]}[Data],
   #"Navegación 3" = #"Navegación 2"{[Id = "minciencia", ItemKind = "Table"]}[Data],
-  #"Columnas quitadas" = Table.RemoveColumns(#"Navegación 3", {"latitud", "longitud", "nombreEstacion"}),
-  #"Filas filtradas 1" = Table.SelectRows(#"Columnas quitadas", each [time] > RangeStart and [time] <= RangeEnd)
+  #"Columnas quitadas" = Table.RemoveColumns(#"Navegación 3", {"latitud", "longitud", "nombreEstacion"})
 in
-  #"Filas filtradas 1";
+  #"Columnas quitadas";
 shared RangeStart = null meta [IsParameterQuery = true, IsParameterQueryRequired = false, Type = type datetime];
 shared RangeEnd = null meta [IsParameterQuery = true, IsParameterQueryRequired = false, Type = type datetime];
 shared minciencia_DataDestination = let
