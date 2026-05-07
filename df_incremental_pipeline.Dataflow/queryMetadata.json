@@ -1,0 +1,40 @@
+{
+  "formatVersion": "202502",
+  "computeEngineSettings": {
+    "allowModernEvaluationEngine": true
+  },
+  "name": "df_incremental",
+  "queryGroups": [],
+  "documentLocale": "es-ES",
+  "queriesMetadata": {
+    "minciencia": {
+      "queryId": "0a6a6198-d051-4047-8e2b-12830eb2755d",
+      "queryName": "minciencia",
+      "loadEnabled": false
+    },
+    "RangeStart": {
+      "queryId": "0e2d6cc3-cf71-441c-ad3b-899f6dbb06eb",
+      "queryName": "RangeStart",
+      "loadEnabled": false
+    },
+    "RangeEnd": {
+      "queryId": "a8783c37-331b-4bcc-827f-e9b5ed7b5037",
+      "queryName": "RangeEnd",
+      "loadEnabled": false
+    },
+    "minciencia_DataDestination": {
+      "queryId": "23aa347a-38dc-4f6d-8fc1-3deaf4133bb3",
+      "queryName": "minciencia_DataDestination",
+      "isHidden": true,
+      "loadEnabled": false
+    }
+  },
+  "connections": [
+    {
+      "path": "Lakehouse",
+      "kind": "Lakehouse",
+      "connectionId": "{\"ClusterId\":\"e71d6571-d7e1-4f40-8765-c7dc3df033d3\",\"DatasourceId\":\"e209fdc5-c2c9-404e-a08e-f6e5600ef0a2\"}"
+    }
+  ],
+  "parametric": true
+}

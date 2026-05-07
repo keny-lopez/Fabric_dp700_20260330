@@ -1,0 +1,63 @@
+{
+  "properties": {
+    "activities": [
+      {
+        "type": "RefreshDataflow",
+        "typeProperties": {
+          "dataflowId": "7de92091-face-ab13-42f7-40087da17016",
+          "workspaceId": "00000000-0000-0000-0000-000000000000",
+          "notifyOption": "NoNotification",
+          "dataflowType": "DataflowFabric",
+          "parameters": {
+            "RangeStart": {
+              "value": {
+                "value": "@formatDateTime(\nactivity('marca agua destino').output,\n'dd-MM-yyyy HH:mm:ss')",
+                "type": "Expression"
+              },
+              "type": "DateTime"
+            },
+            "RangeEnd": {
+              "value": {
+                "value": "@formatDateTime(\n    addDays( activity('marca agua destino').output, 7 ),\n'dd-MM-yyyy HH:mm:ss')",
+                "type": "Expression"
+              },
+              "type": "DateTime"
+            }
+          }
+        },
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "dataflow incremental x pl",
+        "dependsOn": [
+          {
+            "activity": "marca agua destino",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ]
+      },
+      {
+        "type": "TridentNotebook",
+        "typeProperties": {
+          "notebookId": "12ea3578-35e6-b6f0-42eb-bb0adfc9a19d",
+          "workspaceId": "00000000-0000-0000-0000-000000000000"
+        },
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "marca agua destino",
+        "dependsOn": []
+      }
+    ]
+  }
+}
