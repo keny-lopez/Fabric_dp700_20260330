@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Lakehouse",
+    "displayName": "LH_SQL_Seguridad"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "19211090-f383-a02b-4b3e-8e67f56c622a"
+  }
+}
