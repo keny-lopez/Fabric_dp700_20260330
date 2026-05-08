@@ -25,13 +25,47 @@
 
 # CELL ********************
 
-# Ajuste directo sobre tu script funcional
-df = spark.sql("""
-    SELECT MAX(time) AS Fecha_Maxima 
+#Marca de agua:
+
+df_wmo = spark.sql("select max(time) as wmo from Bronze_Landing.minciencia")
+display(df_wmo)
+
+# Ajuste directo sobre el script funcional
+df_wmd = spark.sql("""
+    SELECT MAX(time) AS wmd 
     FROM delta.`abfss://DP700@onelake.dfs.fabric.microsoft.com/Silver_Refined.Lakehouse/Tables/dbo/minciencia_incremental_pipeline`
 """)
+display(df_wmd)
 
-display(df)
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# CELL ********************
+
+# Eliminar algunos datos de octubre y noviembre de la tabla destino:
+# Preparar la tabla eliminando datos de octubre, noviembre y diciembre
+# Usar la ruta física ABFSS para evitar la "ceguera" del motor SQL
+
+script_delete = """
+DELETE FROM delta.`abfss://DP700@onelake.dfs.fabric.microsoft.com/Silver_Refined.Lakehouse/Tables/dbo/minciencia_incremental_pipeline`
+WHERE month(time) IN (10, 11, 12)
+"""
+
+# Ejecutar la instrucción de borrado
+spark.sql(script_delete)
+
+# Verificación: Calculamos la nueva fecha máxima en la tabla de destino
+df_wmd_2 = spark.sql("""
+    SELECT MAX(time) AS wmd_despues_del_borrado 
+    FROM delta.`abfss://DP700@onelake.dfs.fabric.microsoft.com/Silver_Refined.Lakehouse/Tables/dbo/minciencia_incremental`
+""")
+
+display(df_wmd_2)
+
 
 # METADATA ********************
 
@@ -73,24 +107,8 @@ print(f"Control de Calidad: Tabla {nombre_tabla} actualizada exitosamente.")
 # META {
 # META   "language": "python",
 # META   "language_group": "synapse_pyspark",
-# META   "frozen": true,
-# META   "editable": false
-# META }
-
-# CELL ********************
-
- # Marca de agua:
-
-# df = spark.sql("select max(time) from Bronze_Landing.minciencia")
-# df.show()
-
-# METADATA ********************
-
-# META {
-# META   "language": "python",
-# META   "language_group": "synapse_pyspark",
-# META   "frozen": true,
-# META   "editable": false
+# META   "frozen": false,
+# META   "editable": true
 # META }
 
 # CELL ********************
